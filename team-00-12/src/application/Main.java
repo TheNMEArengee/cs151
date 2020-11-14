@@ -9,11 +9,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
-
+import javafx.geometry.Pos;
 
 public class Main extends Application {
 
@@ -142,7 +143,7 @@ public class Main extends Application {
 		
 		
 		//Chess board container
-		BorderPane board = new BorderPane();
+		GridPane board = new GridPane();
 		board.setPrefSize((WIDTH * TILE_SIZE) , (HEIGHT * TILE_SIZE) );
 		board.getChildren().addAll(tilesGroup);
 
@@ -152,6 +153,7 @@ public class Main extends Application {
 			for (int x = 2; x < WIDTH; x++) {
 				Tile tile = new Tile((x + y) % 2 == 0, x, y);
 				tilesGroup.getChildren().add(tile);
+				board.setAlignment(Pos.CENTER);
 			}
 		}
 
