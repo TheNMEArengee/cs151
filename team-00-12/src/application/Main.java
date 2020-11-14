@@ -15,12 +15,19 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.geometry.Pos;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.StrokeType;
+import javafx.scene.transform.Translate;
+import javafx.scene.paint.Paint;
+import javafx.scene.paint.Color;
 
 public class Main extends Application {
 
 	public static final int TILE_SIZE = 75;
-	public static final int HEIGHT = 10;
-	public static final int WIDTH = 10;
+	public static final int HEIGHT = 8;
+	public static final int WIDTH = 8;
+	
+	private Rectangle[][] placementBoard;
 
 
 	@Override
@@ -66,7 +73,7 @@ public class Main extends Application {
 				battleField.getChildren().addAll(createBoard(), backBtn);
 				BorderPane gameRoot = new BorderPane();
 
-				gameRoot.setTop(battleField);
+				gameRoot.setCenter(battleField);
 
 				Scene battleInit = new Scene(gameRoot, 900, 950);
 				primaryStage.setScene(battleInit);
@@ -144,13 +151,24 @@ public class Main extends Application {
 		
 		//Chess board container
 		GridPane board = new GridPane();
-		board.setPrefSize((WIDTH * TILE_SIZE) , (HEIGHT * TILE_SIZE) );
+		placementBoard = new Rectangle[WIDTH][HEIGHT];
+		//board.setPrefSize((WIDTH * TILE_SIZE) , (HEIGHT * TILE_SIZE) );
 		board.getChildren().addAll(tilesGroup);
 
-		
+		for(int x=0; x < 8; x++){
+			for(int j=0; j < 8; j++){
+				placementBoard[x][j] = new Rectangle();
+				placementBoard[x][j].setWidth(TILE_SIZE);
+				placementBoard[x][j].setHeight(TILE_SIZE);
+				placementBoard[x][j].setStroke(Color.TRANSPARENT);
+				placementBoard[x][j].setStrokeType(StrokeType.INSIDE);
+				placementBoard[x][j].setStrokeWidth(1);
+				
+			}
+		}
 		//Create an 8 x 8 chess board and store it into tilesGroup
-		for (int y = 2; y < HEIGHT; y++) {
-			for (int x = 2; x < WIDTH; x++) {
+		for (int y = 0; y < HEIGHT; y++) {
+			for (int x = 0; x < WIDTH; x++) {
 				Tile tile = new Tile((x + y) % 2 == 0, x, y);
 				tilesGroup.getChildren().add(tile);
 				board.setAlignment(Pos.CENTER);
