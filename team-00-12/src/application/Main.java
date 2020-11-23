@@ -16,7 +16,10 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.StrokeType;
 
+import javafx.scene.Node;
 
 public class Main extends Application {
 
@@ -25,6 +28,8 @@ public class Main extends Application {
 	public static final int WIDTH = 10;
 	private double initX;
 	private double initY;
+	private Rectangle[][] placementBoard;
+	private Tile[][] tileGrid;
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -174,15 +179,47 @@ public class Main extends Application {
 		
 		//Chess board container
 		GridPane board = new GridPane();
+		placementBoard = new Rectangle[WIDTH][HEIGHT];
+		
 		board.setPrefSize((WIDTH * TILE_SIZE) , (HEIGHT * TILE_SIZE) );
 		board.getChildren().addAll(tilesGroup);
-
+		
+		
+		for(int y=2; y<10; y++) {
+			for(int x=2; x<10; x++) {
+				final int coordX = x-2;
+				final int coordY = y-2;
+//				System.out.println(coordX + ", "+ coordY);
+				placementBoard[x][y] = new Rectangle();
+				placementBoard[x][y].setWidth(TILE_SIZE);
+				placementBoard[x][y].setHeight(TILE_SIZE);
+				placementBoard[x][y].setStroke(Color.TRANSPARENT);
+				if((x+y)%2 == 0) {
+					placementBoard[x][y].setFill(Color.BLACK);
+				}
+				else {
+					placementBoard[x][y].setFill(Color.WHITE);
+				}
+				placementBoard[x][y].setStrokeType(StrokeType.INSIDE);
+				placementBoard[x][y].setStrokeWidth(1);
+				placementBoard[x][y].relocate(x * TILE_SIZE, y * TILE_SIZE);
+				placementBoard[x][y].addEventHandler(MouseEvent.MOUSE_CLICKED, e->{
+					System.out.println("("+ coordX +", "+ coordY+")");
+				});
+				tilesGroup.getChildren().add(placementBoard[x][y]);
+			}
+		}
+		
 		
 		//Create an 8 x 8 chess board and store it into tilesGroup
-		for (int y = 2; y < HEIGHT; y++) {
-			for (int x = 2; x < WIDTH; x++) {
+		for (int y = 0; y < HEIGHT; y++) {
+			for (int x = 0; x < WIDTH; x++) {
 				Tile tile = new Tile((x + y) % 2 == 0, x, y);
-				tilesGroup.getChildren().add(tile);
+				tile.addEventHandler(MouseEvent.MOUSE_CLICKED, e->{
+					System.out.println("Hi: " + e);
+				});
+//				tileGrid[x][y] = tile;
+//				tilesGroup.getChildren().add(tile);
 				board.setAlignment(Pos.CENTER);
 			}
 		}
