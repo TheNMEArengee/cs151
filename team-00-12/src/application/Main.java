@@ -44,7 +44,6 @@ public class Main extends Application {
 	public static final int WIDTH = 10;
 	private double initX;
 	private double initY;
-	private Rectangle[][] placementBoard;
 	
 
 	@Override
@@ -208,63 +207,7 @@ public class Main extends Application {
 	}
 	
 	
-	// Constructs the checker board (WIP)
-//	private Parent createBoard() {
-//		Group tilesGroup = new Group();
-//		
-//		
-//		//Chess board container
-//		GridPane board = new GridPane();
-//
-//		placementBoard = new Rectangle[WIDTH][HEIGHT];
-//		
-//		board.setPrefSize((WIDTH * TILE_SIZE) , (HEIGHT * TILE_SIZE) );
-//		board.getChildren().addAll(tilesGroup);
-//		
-//		
-//		for(int y=2; y<10; y++) {
-//			for(int x=2; x<10; x++) {
-//				final int coordX = x-2;
-//				final int coordY = y-2;
-////				System.out.println(coordX + ", "+ coordY);
-//				placementBoard[x][y] = new Rectangle();
-//				placementBoard[x][y].setWidth(TILE_SIZE);
-//				placementBoard[x][y].setHeight(TILE_SIZE);
-//				placementBoard[x][y].setStroke(Color.TRANSPARENT);
-//				if((x+y)%2 == 0) {
-//					placementBoard[x][y].setFill(Color.BLACK);
-//				}
-//				else {
-//					placementBoard[x][y].setFill(Color.WHITE);
-//				}
-//				placementBoard[x][y].setStrokeType(StrokeType.INSIDE);
-//				placementBoard[x][y].setStrokeWidth(1);
-//				placementBoard[x][y].relocate(x * TILE_SIZE, y * TILE_SIZE);
-//				placementBoard[x][y].addEventHandler(MouseEvent.MOUSE_CLICKED, e->{
-//					System.out.println("("+ coordX +", "+ coordY+")");
-//				});
-//				tilesGroup.getChildren().add(placementBoard[x][y]);
-//			}
-//		}	
-//
-//		
-//		//Create an 8 x 8 chess board and store it into tilesGroup
-//		for (int y = 0; y < HEIGHT; y++) {
-//			for (int x = 0; x < WIDTH; x++) {
-//				Tile tile = new Tile((x + y) % 2 == 0, x, y);
-//				tile.addEventHandler(MouseEvent.MOUSE_CLICKED, e->{
-//					System.out.println("Hi: " + e);
-//				});
-////				tileGrid[x][y] = tile;
-////				tilesGroup.getChildren().add(tile);
-//				board.setAlignment(Pos.CENTER);
-//			}
-//		}
-//		
-//		return board;
-//	}
-	
-	
+	//imported from 133 project
 	public void goToGame(ActionEvent event) throws IOException {
 
 
@@ -282,12 +225,6 @@ public class Main extends Application {
 		button.setOnAction(new ResetAction(pane));
 		Button button1 = new Button("back");
 		
-//		button1.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-//			primaryStage.setScene(welcomeScene);
-//		});
-		
-//		button1.setOnAction(new GoHomeAction(pane));
-		
 		hBox.getChildren().add(button);
 		hBox.getChildren().add(button1);
 		borderPane.setBottom(hBox);
@@ -296,21 +233,8 @@ public class Main extends Application {
 		window.setScene(scene);
 		window.setTitle("Chess");
 		window.show();
-		
-		
-//		AnchorPane root = (AnchorPane)FXMLLoader.load(getClass().getResource("chessGameBoard1.fxml"));
-//		Scene scene = new Scene(root);
-//		scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-//		Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
-//		window.setScene(scene);
-//		window.setTitle("chess");
-//		window.show();
 	}
-	
-	
-	public void movePiece(MouseEvent e) {
-		
-	}
+
 
 	public static void main(String[] args) {
 		launch(args);

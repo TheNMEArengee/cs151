@@ -9,7 +9,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 
+
+//Constructs the checker board
 public class CreateBoard {
+	
 	public static Parent createBoard() {
 		Group tilesGroup = new Group();
 		
@@ -27,7 +30,6 @@ public class CreateBoard {
 			for(int x=2; x<10; x++) {
 				final int coordX = x-2;
 				final int coordY = y-2;
-//				System.out.println(coordX + ", "+ coordY);
 				placementBoard[x][y] = new Rectangle();
 				placementBoard[x][y].setWidth(Main.TILE_SIZE);
 				placementBoard[x][y].setHeight(Main.TILE_SIZE);
@@ -56,8 +58,6 @@ public class CreateBoard {
 				tile.addEventHandler(MouseEvent.MOUSE_CLICKED, e->{
 					System.out.println("Hi: " + e);
 				});
-//				tileGrid[x][y] = tile;
-//				tilesGroup.getChildren().add(tile);
 				board.setAlignment(Pos.CENTER);
 			}
 		}
