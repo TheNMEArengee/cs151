@@ -172,7 +172,7 @@ public class Main extends Application {
 				Tile tile = new Tile((x + y) % 2 == 0, x, y);
 				tilesGroup.getChildren().add(tile);
 				board.setAlignment(Pos.CENTER);
-				system.out.print("okay");
+				System.out.print("okay");
 			}
 		}
 
