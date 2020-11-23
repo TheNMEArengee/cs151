@@ -14,13 +14,13 @@ import javafx.scene.layout.Pane;
 
 
 //Constructs the checker board
-public class CreateBoard extends Pane{
+public class Board extends Pane{
 	private static Rectangle[][] placementBoard = new Rectangle[Main.WIDTH][Main.HEIGHT];
 	private static Image[][] images;
 	private static ImageView[][] imageviews;
 
 
-	public static Parent createBoard() {
+	public Board() {
 		Group tilesGroup = new Group();
 
 
@@ -126,14 +126,6 @@ public class CreateBoard extends Pane{
 //		//initialize the board: background, data structures, inital layout of pieces
 //		Piece[][] pieces = new Piece[boardWidth][boardHeight];
 		// Places background squares
-		for(int i = 0; i < 8; i++){
-			for(int j = 0; j < 8; j++){
-				placementBoard.placeboard(i, j);
-			}
-		}
-		
-
-		return board;
 	}
 	
 	

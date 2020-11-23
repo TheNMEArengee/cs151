@@ -91,7 +91,25 @@ public class Main extends Application {
 			// now)
 			startBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
 				VBox battleField = constructVBox();
-				battleField.getChildren().addAll(CreateBoard.createBoard(), backBtn);
+				Board board = new Board();
+				
+				
+				// Places background squares
+				for(int i = 2; i < 10; i++){
+					for(int j = 2; j < 10; j++){
+						board.placeboard(i, j);
+					}
+				}
+				
+				
+				for(int i = 0; i < 8; i++){
+					for(int j = 0; j < 8; j++){
+						board.placeimages(i, j);
+					}
+				}
+				
+				
+				battleField.getChildren().addAll(board, backBtn);
 				BorderPane gameRoot = new BorderPane();
 
 				gameRoot.setCenter(battleField);
