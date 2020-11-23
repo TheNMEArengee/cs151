@@ -1,5 +1,6 @@
 package application;
 
+import javafx.scene.paint.Color;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -20,14 +21,19 @@ import javafx.scene.shape.StrokeType;
 import javafx.scene.transform.Translate;
 import javafx.scene.paint.Paint;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+
 
 public class Main extends Application {
 
-	public static final int TILE_SIZE = 75;
+	public static final int TILE_SIZE = 60;
 	public static final int HEIGHT = 8;
 	public static final int WIDTH = 8;
+	private double initX;
+	private double initY;
 	
 	private Rectangle[][] placementBoard;
+
 
 
 	@Override
@@ -48,14 +54,18 @@ public class Main extends Application {
 			Button backBtn = new Button("Back");
 			backBtn.setPrefSize(100, 60);
 			
-
 			// Container for title screen
 			VBox vbox = constructVBox();
 			vbox.setPadding(new Insets(10, 10, 10, 10));
 			vbox.getChildren().addAll(titleLbl, startBtn, tutorialBtn, quitBtn);
+
 			BorderPane root = new BorderPane();
 			root.setCenter(vbox);
-
+			
+			Circle c = createCircle(Color.RED, 20, 100, 100);
+			Circle b = createCircle(Color.CORAL, 20, 200, 200);
+			root.getChildren().addAll(c, b);
+			
 			// Title screen creation
 			Scene welcomeScene = new Scene(root, 400, 400);
 			primaryStage.setScene(welcomeScene);
@@ -75,7 +85,7 @@ public class Main extends Application {
 
 				gameRoot.setCenter(battleField);
 
-				Scene battleInit = new Scene(gameRoot, 900, 950);
+				Scene battleInit = new Scene(gameRoot, 600, 650);
 				primaryStage.setScene(battleInit);
 			});
 
@@ -114,7 +124,6 @@ public class Main extends Application {
 			// Event handler for back button on title screen. Exits the application
 			quitBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> primaryStage.hide());
 			
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -124,6 +133,30 @@ public class Main extends Application {
 	 * METHODS
 	 */
 	
+	private Circle createCircle(Color color, int radius, int x, int y) {
+		Circle c = new Circle();
+		c.setCenterX(x);
+		c.setCenterY(y);
+		c.setRadius(radius);
+		c.setFill(color);
+		c.addEventFilter(MouseEvent.MOUSE_CLICKED, e->{
+			initX = c.getTranslateX();
+			initY = c.getTranslateY();
+			System.out.println("("+ initX +", "+initY+")");
+			c.toFront();
+		});
+		c.addEventFilter(MouseEvent.MOUSE_DRAGGED, e->{
+			double dragX = e.getSceneX();
+			double dragY = e.getSceneY();
+			double fi = initX + dragX;
+			double fo = initY + dragY;
+//			System.out.println("fi: "+ fi);
+			c.setCenterX(fi);
+			c.setCenterY(fo);
+			c.toFront();
+		});
+		return c;
+	}
 	
 	// Constructs an HBox with the dimensions specified below (Not used yet)
 	private HBox constructHBox() {
@@ -151,9 +184,13 @@ public class Main extends Application {
 		
 		//Chess board container
 		GridPane board = new GridPane();
+
 		placementBoard = new Rectangle[WIDTH][HEIGHT];
 		//board.setPrefSize((WIDTH * TILE_SIZE) , (HEIGHT * TILE_SIZE) );
-		board.getChildren().addAll(tilesGroup);
+
+		
+	
+	board.getChildren().addAll(tilesGroup);
 
 		for(int x=0; x < 8; x++){
 			for(int j=0; j < 8; j++){
@@ -162,8 +199,7 @@ public class Main extends Application {
 				placementBoard[x][j].setHeight(TILE_SIZE);
 				placementBoard[x][j].setStroke(Color.TRANSPARENT);
 				placementBoard[x][j].setStrokeType(StrokeType.INSIDE);
-				placementBoard[x][j].setStrokeWidth(1);
-				
+				placementBoard[x][j].setStrokeWidth(1);				
 			}
 		}
 		//Create an 8 x 8 chess board and store it into tilesGroup
@@ -172,11 +208,14 @@ public class Main extends Application {
 				Tile tile = new Tile((x + y) % 2 == 0, x, y);
 				tilesGroup.getChildren().add(tile);
 				board.setAlignment(Pos.CENTER);
-				System.out.print("okay");
 			}
 		}
-
+		
 		return board;
+	}
+	
+	public void movePiece(MouseEvent e) {
+		
 	}
 
 	public static void main(String[] args) {
