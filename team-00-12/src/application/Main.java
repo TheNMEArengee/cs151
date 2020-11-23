@@ -245,10 +245,7 @@ public class Main extends Application {
 				});
 				tilesGroup.getChildren().add(placementBoard[x][y]);
 			}
-		}
-		
-
-		
+		}	
 
 		
 		//Create an 8 x 8 chess board and store it into tilesGroup
