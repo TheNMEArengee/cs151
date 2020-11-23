@@ -1,10 +1,18 @@
 package application;
 
 import javafx.scene.paint.Color;
+
+import java.io.IOException;
+
+import Controller.PressedAction;
+import Controller.ReleaseAction;
+import Controller.ResetAction;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -14,6 +22,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import view.ChessBoard;
+import view.ChessPane;
 import javafx.scene.Parent;
 import javafx.geometry.Pos;
 import javafx.scene.shape.Rectangle;
@@ -71,6 +81,7 @@ public class Main extends Application {
 			primaryStage.setScene(welcomeScene);
 			primaryStage.show();
 
+			
 			/*
 			 * BUTTON EVENTS
 			 */
@@ -79,14 +90,33 @@ public class Main extends Application {
 			// Event for start button. Sends the user to the game (WIP, just the board for
 			// now)
 			startBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-				VBox battleField = constructVBox();
-				battleField.getChildren().addAll(createBoard(), backBtn);
-				BorderPane gameRoot = new BorderPane();
+//				VBox battleField = constructVBox();
+//				battleField.getChildren().addAll(createBoard(), backBtn);
+//				BorderPane gameRoot = new BorderPane();
+//
+//				gameRoot.setCenter(battleField);
+//
+//				Scene battleInit = new Scene(gameRoot, 600, 650);
+//				primaryStage.setScene(battleInit);
+				
+				
+				ChessBoard chessBoard = ChessBoard.getInstance(68.75,25,25);
+				ChessPane pane = new ChessPane(chessBoard);
+				
+				pane.setOnMousePressed(new PressedAction(pane));
+				pane.setOnMouseReleased(new ReleaseAction(pane));
 
-				gameRoot.setCenter(battleField);
-
-				Scene battleInit = new Scene(gameRoot, 600, 650);
-				primaryStage.setScene(battleInit);
+				BorderPane borderPane = new BorderPane();
+				borderPane.setCenter(pane);
+				HBox hBox = new HBox();
+				hBox.setAlignment(Pos.TOP_CENTER);
+				Button button = new Button("Return");
+				button.setOnAction(new ResetAction(pane));
+				hBox.getChildren().add(button);
+				hBox.getChildren().add(backBtn);
+				borderPane.setBottom(hBox);
+				Scene scene = new Scene(borderPane,600,600);
+				primaryStage.setScene(scene);
 			});
 
 			// Event for tutorial button. Brings up the tutorial section for the game.
@@ -213,6 +243,50 @@ public class Main extends Application {
 		
 		return board;
 	}
+	
+	
+	public void goToGame(ActionEvent event) throws IOException {
+
+
+		ChessBoard chessBoard = ChessBoard.getInstance(68.75,25,25);
+		ChessPane pane = new ChessPane(chessBoard);
+		pane.setOnMousePressed(new PressedAction(pane));
+
+		pane.setOnMouseReleased(new ReleaseAction(pane));
+
+		BorderPane borderPane = new BorderPane();
+		borderPane.setCenter(pane);
+		HBox hBox = new HBox();
+		hBox.setAlignment(Pos.TOP_CENTER);
+		Button button = new Button("Regret");
+		button.setOnAction(new ResetAction(pane));
+		Button button1 = new Button("back");
+		
+//		button1.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
+//			primaryStage.setScene(welcomeScene);
+//		});
+		
+//		button1.setOnAction(new GoHomeAction(pane));
+		
+		hBox.getChildren().add(button);
+		hBox.getChildren().add(button1);
+		borderPane.setBottom(hBox);
+		Scene scene = new Scene(borderPane,600,600);
+		Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
+		window.setScene(scene);
+		window.setTitle("Chess");
+		window.show();
+		
+		
+//		AnchorPane root = (AnchorPane)FXMLLoader.load(getClass().getResource("chessGameBoard1.fxml"));
+//		Scene scene = new Scene(root);
+//		scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+//		Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
+//		window.setScene(scene);
+//		window.setTitle("chess");
+//		window.show();
+	}
+	
 	
 	public void movePiece(MouseEvent e) {
 		
