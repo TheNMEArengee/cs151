@@ -32,19 +32,20 @@ import javafx.scene.transform.Translate;
 import javafx.scene.paint.Paint;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.StrokeType;
 
+import javafx.scene.Node;
 
 public class Main extends Application {
 
 	public static final int TILE_SIZE = 60;
-	public static final int HEIGHT = 8;
-	public static final int WIDTH = 8;
+	public static final int HEIGHT = 10;
+	public static final int WIDTH = 10;
 	private double initX;
 	private double initY;
-	
 	private Rectangle[][] placementBoard;
-
-
+	
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -90,33 +91,33 @@ public class Main extends Application {
 			// Event for start button. Sends the user to the game (WIP, just the board for
 			// now)
 			startBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-//				VBox battleField = constructVBox();
-//				battleField.getChildren().addAll(createBoard(), backBtn);
-//				BorderPane gameRoot = new BorderPane();
-//
-//				gameRoot.setCenter(battleField);
-//
-//				Scene battleInit = new Scene(gameRoot, 600, 650);
-//				primaryStage.setScene(battleInit);
-				
-				
-				ChessBoard chessBoard = ChessBoard.getInstance(68.75,25,25);
-				ChessPane pane = new ChessPane(chessBoard);
-				
-				pane.setOnMousePressed(new PressedAction(pane));
-				pane.setOnMouseReleased(new ReleaseAction(pane));
+				VBox battleField = constructVBox();
+				battleField.getChildren().addAll(createBoard(), backBtn);
+				BorderPane gameRoot = new BorderPane();
 
-				BorderPane borderPane = new BorderPane();
-				borderPane.setCenter(pane);
-				HBox hBox = new HBox();
-				hBox.setAlignment(Pos.TOP_CENTER);
-				Button button = new Button("Return");
-				button.setOnAction(new ResetAction(pane));
-				hBox.getChildren().add(button);
-				hBox.getChildren().add(backBtn);
-				borderPane.setBottom(hBox);
-				Scene scene = new Scene(borderPane,600,600);
-				primaryStage.setScene(scene);
+				gameRoot.setCenter(battleField);
+
+				Scene battleInit = new Scene(gameRoot, 600, 650);
+				primaryStage.setScene(battleInit);
+				
+				
+//				ChessBoard chessBoard = ChessBoard.getInstance(68.75,25,25);
+//				ChessPane pane = new ChessPane(chessBoard);
+//				
+//				pane.setOnMousePressed(new PressedAction(pane));
+//				pane.setOnMouseReleased(new ReleaseAction(pane));
+//
+//				BorderPane borderPane = new BorderPane();
+//				borderPane.setCenter(pane);
+//				HBox hBox = new HBox();
+//				hBox.setAlignment(Pos.TOP_CENTER);
+//				Button button = new Button("Return");
+//				button.setOnAction(new ResetAction(pane));
+//				hBox.getChildren().add(button);
+//				hBox.getChildren().add(backBtn);
+//				borderPane.setBottom(hBox);
+//				Scene scene = new Scene(borderPane,600,600);
+//				primaryStage.setScene(scene);
 			});
 
 			// Event for tutorial button. Brings up the tutorial section for the game.
@@ -216,27 +217,49 @@ public class Main extends Application {
 		GridPane board = new GridPane();
 
 		placementBoard = new Rectangle[WIDTH][HEIGHT];
-		//board.setPrefSize((WIDTH * TILE_SIZE) , (HEIGHT * TILE_SIZE) );
-
 		
-	
-	board.getChildren().addAll(tilesGroup);
-
-		for(int x=0; x < 8; x++){
-			for(int j=0; j < 8; j++){
-				placementBoard[x][j] = new Rectangle();
-				placementBoard[x][j].setWidth(TILE_SIZE);
-				placementBoard[x][j].setHeight(TILE_SIZE);
-				placementBoard[x][j].setStroke(Color.TRANSPARENT);
-				placementBoard[x][j].setStrokeType(StrokeType.INSIDE);
-				placementBoard[x][j].setStrokeWidth(1);				
+		board.setPrefSize((WIDTH * TILE_SIZE) , (HEIGHT * TILE_SIZE) );
+		board.getChildren().addAll(tilesGroup);
+		
+		
+		for(int y=2; y<10; y++) {
+			for(int x=2; x<10; x++) {
+				final int coordX = x-2;
+				final int coordY = y-2;
+//				System.out.println(coordX + ", "+ coordY);
+				placementBoard[x][y] = new Rectangle();
+				placementBoard[x][y].setWidth(TILE_SIZE);
+				placementBoard[x][y].setHeight(TILE_SIZE);
+				placementBoard[x][y].setStroke(Color.TRANSPARENT);
+				if((x+y)%2 == 0) {
+					placementBoard[x][y].setFill(Color.BLACK);
+				}
+				else {
+					placementBoard[x][y].setFill(Color.WHITE);
+				}
+				placementBoard[x][y].setStrokeType(StrokeType.INSIDE);
+				placementBoard[x][y].setStrokeWidth(1);
+				placementBoard[x][y].relocate(x * TILE_SIZE, y * TILE_SIZE);
+				placementBoard[x][y].addEventHandler(MouseEvent.MOUSE_CLICKED, e->{
+					System.out.println("("+ coordX +", "+ coordY+")");
+				});
+				tilesGroup.getChildren().add(placementBoard[x][y]);
 			}
 		}
+		
+
+		
+
+		
 		//Create an 8 x 8 chess board and store it into tilesGroup
 		for (int y = 0; y < HEIGHT; y++) {
 			for (int x = 0; x < WIDTH; x++) {
 				Tile tile = new Tile((x + y) % 2 == 0, x, y);
-				tilesGroup.getChildren().add(tile);
+				tile.addEventHandler(MouseEvent.MOUSE_CLICKED, e->{
+					System.out.println("Hi: " + e);
+				});
+//				tileGrid[x][y] = tile;
+//				tilesGroup.getChildren().add(tile);
 				board.setAlignment(Pos.CENTER);
 			}
 		}
