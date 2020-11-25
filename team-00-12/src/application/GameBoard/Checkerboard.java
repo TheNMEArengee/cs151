@@ -1,88 +1,72 @@
-package application;
+package application.GameBoard;
 
-import javafx.geometry.Pos;
-import javafx.scene.Group;
-import javafx.scene.Parent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.StrokeType;
-
-
-//Constructs the checker board
-public class CheckerBoard {
-	static CheckerBoard checkerBoard = null;
+//Constructs the Checkerboard battlefield
+public class Checkerboard {
+	static Checkerboard checkerboard = null;
 	private int rows;
 	private int cols;
-	private int tileSize;
+	private int tileSize; // Size of each tile on checker board
 	private int initX;
 	private int initY;
-	private int currPlayer;
-	private Rectangle[][] pieces;
-	
-	private CheckerBoard() {
+	private int currPlayer; // Player 0 or 1
+
+	// Private Constructor, only one instance allowed
+	private Checkerboard() {
 		this.rows = 8;
 		this.cols = 8;
 		this.tileSize = 60;
 		this.initX = 0;
 		this.initY = 0;
 		this.currPlayer = 0;
-		this.pieces = new Rectangle[this.rows][this.cols];
 	}
-	
-	public static CheckerBoard getInstance() {
-		if(checkerBoard == null) {
-			checkerBoard = new CheckerBoard();
+
+	// Get that one instance of Checkerboard
+	public static Checkerboard getInstance() {
+		if (checkerboard == null) {
+			checkerboard = new Checkerboard();
 		}
-		return checkerBoard;
+		return checkerboard;
 	}
-	
+
+	/* Get and Set methods */
 	public int getCols() {
 		return this.cols;
 	}
-	
+
 	public int getRows() {
 		return this.rows;
 	}
-	
+
 	public int getTileSize() {
 		return this.tileSize;
 	}
-	
+
 	public int getInitX() {
 		return this.initX;
 	}
-	
+
 	public void setInitX(int x) {
 		this.initX = x;
 	}
-	
+
 	public int getInitY() {
 		return this.initY;
 	}
-	
+
 	public void setInitY(int y) {
 		this.initY = y;
 	}
-	
+
 	public int getCurrPlayer() {
 		return this.currPlayer;
 	}
-	
+
+	/* When a player moves, switch turn to other player */
 	public void changePlayerTurn() {
 		this.currPlayer = (this.currPlayer == 0 ? 1 : 0);
 	}
-	
-	public Rectangle[][] getPieces(){
-		return this.pieces;
-	}
-	
-	public void setPiece(int x, int y, Rectangle r) {
-		this.pieces[x][y] = r;
-	}
-	
-	
+
+	/* Old Code */
 //		Group tilesGroup = new Group();
 //		
 //		//Chess board container
@@ -129,11 +113,5 @@ public class CheckerBoard {
 //				board.setAlignment(Pos.CENTER);
 //			}
 //		}
-		
-	
-	public void test() {
-		System.out.println("hi there");
-		
-	}
 
 }
