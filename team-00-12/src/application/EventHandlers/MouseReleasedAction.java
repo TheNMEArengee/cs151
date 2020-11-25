@@ -31,6 +31,9 @@ public class MouseReleasedAction implements EventHandler<MouseEvent> {
 		int releasedX = (int) ((e.getX() - checkerboard.getInitX()) / (tileSize));
 		int releasedY = (int) ((e.getY() - checkerboard.getInitY()) / (tileSize));
 
+		boolean validMove = false;
+		Unit unitToRemove = null;
+
 		// Check all units to see which one is selected, then determine validity of
 		// movement with game logic
 		for (Unit u : checkerboardPane.getUnits()) {
@@ -39,39 +42,55 @@ public class MouseReleasedAction implements EventHandler<MouseEvent> {
 					// If the player did not just click and release on the same tile
 					if (!((u.getX() == releasedX) && (u.getY() == releasedY))) {
 						// Means they moved, set the unit's location to new coordinates
-						u.setX(releasedX);
-						u.setY(releasedY);
-						System.out.println(
-								"Player " + checkerboard.getCurrPlayer() + " ("+u.getColor()+")"+ " move to " + releasedX + ", " + releasedY + ".");
-						checkerboard.changePlayerTurn();
+						validMove = true;
+						Unit unitAtReleasedCoords = unitExistsAtCoords(releasedX, releasedY, checkerboardPane);
+						if (unitAtReleasedCoords != null) { // Check if unit exists at coords that unit wants to move to
+							// Check the unit's player
+							if (unitAtReleasedCoords.getPlayer() == u.getPlayer()) { // If own player's unit, invalid
+																						// move
+								System.out.println("Invalid move: Player's own unit exists at destination.");
+								validMove = false;
+							} else { // Enemy unit, remove the enemy unit from the set
+								System.out.println("Player " + checkerboard.getEnemyPlayer() + " ("
+										+ checkerboard.getEnemyPlayerToString() + ")" + " unit down!");
+								unitToRemove = unitAtReleasedCoords;
+							}
+						}
+						if (validMove) {
+							u.setX(releasedX);
+							u.setY(releasedY);
+							System.out.println("Player " + checkerboard.getCurrPlayer() + " (" + u.getColor() + ")"
+									+ " move to " + releasedX + ", " + releasedY + ".");
+							checkerboard.changePlayerTurn();
+						}
 					} else {
-						System.out.println("Invalid move u cuck");
+						System.out.println("Invalid move: Drag only");
+						u.setSelected(false); // Remove if you want clicking
 						break;
 					}
-					System.out.println("Player " + checkerboard.getCurrPlayer() + " ("+u.getEnemyColor()+")"+" turn.");
-
-					/* For reference */
-//                  if(o.getMoveStrategy().move(x, y,chessPane.getChessPieces())){
-//                  if(judgeGame(x,y)){
-//                      printTip(o.getSide());
-//                  }
-//                  eatPiece(x,y,o.getSide());
-//                  stack.push((ChessPiece) o.clone());
-//                  System.out.println(o.getCol()+" "+o.getRow()+" "+x+" "+y);
-//                  if(o.getRow()!=y&&o.getCol()!=x){
-//                      chessBoard.changeSide();
-//                  }
-//                  u.setX(x);
-//                  u.setY(y);
-//              }
-
 				} else {
-					System.out.println("Invalid: Not your turn. Player " + checkerboard.getCurrPlayer() + " ("+u.getEnemyColor()+")"+" turn.");
+					System.out.println("Invalid: Not your turn. Player " + checkerboard.getCurrPlayer() + " ("
+							+ checkerboard.getCurrPlayerToString() + ")" + " turn.");
 				}
 				u.setSelected(false);
+				System.out.println("Unselected Unit.");
+				System.out.println("Player " + checkerboard.getCurrPlayer() + " ("
+						+ checkerboard.getCurrPlayerToString() + ")" + " turn.");
 			}
 		}
+		checkerboardPane.getUnits().remove(unitToRemove);
 		checkerboardPane.drawUnits();
+	}
+
+	public Unit unitExistsAtCoords(int x, int y, CheckerboardPane cp) {
+		Unit unitAtCoords = null;
+		for (Unit u : cp.getUnits()) {
+			if ((u.getX() == x) && (u.getY() == y)) {
+				unitAtCoords = u;
+			}
+		}
+		return unitAtCoords;
+
 	}
 
 	/* Not used */

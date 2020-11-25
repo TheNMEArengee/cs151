@@ -61,16 +61,15 @@ public class CheckerboardPane extends Pane {
 	public void drawBoard() {
 		int tileSize = checkerboard.getTileSize();
 		// Nested for loop to draw 8x8 checkerboard
-		for (int y = 0; y < checkerboard.getCols(); y++) { // 0-7
-			for (int x = 0; x < checkerboard.getRows(); x++) { // 0-7
-				final int coordX = x;
-				final int coordY = y;
-
+		// Using i, j since x, y used as coordinate variables
+		for (int j = 0; j < checkerboard.getCols(); j++) { // 0-7
+			for (int i = 0; i < checkerboard.getRows(); i++) { // 0-7
 				// Rectangle(x coord, y coord, width, height)
-				Rectangle r = new Rectangle(tileSize * x, tileSize * y, tileSize, tileSize);
-
+				int x = checkerboard.getInitX() + (i * tileSize);
+				int y = checkerboard.getInitY() + (j * tileSize);
+				Rectangle r = new Rectangle(x, y, tileSize, tileSize);
 				// Alternate Colors
-				if ((x + y) % 2 == 0) {
+				if ((i + j) % 2 == 0) {
 					r.setFill(Color.rgb(232, 235, 239));
 				} else {
 					r.setFill(Color.rgb(125, 135, 150));
@@ -80,11 +79,11 @@ public class CheckerboardPane extends Pane {
 			}
 		}
 	}
-	
+
 	// Draw the units using the "units" set that was initialized in setUnits()
 	public void drawUnits() {
 		int tileSize = checkerboard.getTileSize();
-		//Traverse entire "units" set
+		// Traverse entire "units" set
 		units.forEach(u -> {
 			// If we ever want to draw something to symbolize "Selected" visually
 //			if (u.isSelected()) {
@@ -95,11 +94,11 @@ public class CheckerboardPane extends Pane {
 			int x = 10 + (u.getX() * tileSize);
 			int y = 10 + (u.getY() * tileSize);
 			Rectangle r = new Rectangle(x, y, 40, 40);
-			
-			//Rounded edges for units
+
+			// Rounded edges for units
 			r.setArcWidth(20);
 			r.setArcHeight(20);
-			
+
 			// Determine color of pieces, check which player the unit belongs to
 			if (u.getPlayer() == 0) {
 				r.setFill(Color.WHITE);
@@ -108,7 +107,7 @@ public class CheckerboardPane extends Pane {
 				r.setFill(Color.GREY);
 				r.setStroke(Color.BLACK);
 			}
-			
+
 			tileGroup.getChildren().add(r);
 		});
 	}

@@ -103,6 +103,7 @@ public class Main extends Application {
 				primaryStage.close();
 				VBox battleField = constructVBox();
 				Checkerboard checkerboard = Checkerboard.getInstance();
+				checkerboard.setCurrentPlayer(0); // Ensure Player 0 starts every time 'Start' is pressed.
 				CheckerboardPane checkerboardPane = new CheckerboardPane(checkerboard);
 				battleField.getChildren().addAll(checkerboardPane, backBtn);
 				checkerboardPane.setOnMousePressed(new MousePressedAction(checkerboardPane));

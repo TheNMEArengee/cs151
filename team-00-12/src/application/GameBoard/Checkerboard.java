@@ -6,18 +6,21 @@ public class Checkerboard {
 	private int rows;
 	private int cols;
 	private int tileSize; // Size of each tile on checker board
+	private int currPlayer; // Player 0 or 1
+
+	// initX and initY supposed to be used to move the drawn board
+	// But does not work for now, so set both to 0.
 	private int initX;
 	private int initY;
-	private int currPlayer; // Player 0 or 1
 
 	// Private Constructor, only one instance allowed
 	private Checkerboard() {
 		this.rows = 8;
 		this.cols = 8;
 		this.tileSize = 60;
+		this.currPlayer = 0;
 		this.initX = 0;
 		this.initY = 0;
-		this.currPlayer = 0;
 	}
 
 	// Get that one instance of Checkerboard
@@ -26,6 +29,11 @@ public class Checkerboard {
 			checkerboard = new Checkerboard();
 		}
 		return checkerboard;
+	}
+
+	/* When a player moves, switch turn to other player */
+	public void changePlayerTurn() {
+		this.currPlayer = (this.currPlayer == 0 ? 1 : 0);
 	}
 
 	/* Get and Set methods */
@@ -39,6 +47,27 @@ public class Checkerboard {
 
 	public int getTileSize() {
 		return this.tileSize;
+	}
+
+	public int getCurrPlayer() {
+		return this.currPlayer;
+	}
+
+	public void setCurrentPlayer(int playerNum) {
+		if (playerNum == 0 || playerNum == 1)
+			this.currPlayer = playerNum;
+	}
+
+	public int getEnemyPlayer() {
+		return this.currPlayer == 0 ? 1 : 0;
+	}
+
+	public String getCurrPlayerToString() {
+		return this.currPlayer == 0 ? "White" : "Black";
+	}
+
+	public String getEnemyPlayerToString() {
+		return this.currPlayer == 0 ? "Black" : "White";
 	}
 
 	public int getInitX() {
@@ -55,15 +84,6 @@ public class Checkerboard {
 
 	public void setInitY(int y) {
 		this.initY = y;
-	}
-
-	public int getCurrPlayer() {
-		return this.currPlayer;
-	}
-
-	/* When a player moves, switch turn to other player */
-	public void changePlayerTurn() {
-		this.currPlayer = (this.currPlayer == 0 ? 1 : 0);
 	}
 
 	/* Old Code */

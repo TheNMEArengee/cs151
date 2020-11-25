@@ -8,7 +8,7 @@ public class Unit {
 	private String color;
 	private boolean selected;
 
-	//Constructor 
+	// Constructor
 	public Unit(int x, int y, int player) {
 		this.x = x;
 		this.y = y;
@@ -43,19 +43,18 @@ public class Unit {
 	}
 
 	public String getEnemyColor() {
-		if(this.player == 0) {
+		if (this.player == 0) {
 			return "Black";
-		}
-		else if(this.player == 1) {
+		} else if (this.player == 1) {
 			return "White";
 		}
 		return "Error";
 	}
-	
+
 	public void setSelected(boolean b) {
 		this.selected = b;
 	}
-	
+
 	public boolean isSelected() {
 		return this.selected;
 	}
