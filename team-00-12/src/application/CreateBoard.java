@@ -16,7 +16,6 @@ public class CreateBoard {
 	public static Parent createBoard() {
 		Group tilesGroup = new Group();
 		
-		
 		//Chess board container
 		GridPane board = new GridPane();
 

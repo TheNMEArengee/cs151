@@ -81,24 +81,33 @@ public class Main extends Application {
 			primaryStage.setScene(welcomeScene);
 			primaryStage.show();
 
-			
+//			CheckerBoard board = new CheckerBoard();
 			/*
 			 * BUTTON EVENTS
 			 */
 
-			
 			// Event for start button. Sends the user to the game (WIP, just the board for
 			// now)
 			startBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-				VBox battleField = constructVBox();
-				battleField.getChildren().addAll(CreateBoard.createBoard(), backBtn);
-				BorderPane gameRoot = new BorderPane();
+//				VBox battleField = constructVBox();
+//				battleField.getChildren().addAll(CreateBoard.createBoard(), backBtn);
+//				BorderPane gameRoot = new BorderPane();
 
-				gameRoot.setCenter(battleField);
+//				gameRoot.setCenter(battleField);
 
-				Scene battleInit = new Scene(gameRoot, 600, 650);
-				primaryStage.setScene(battleInit);
+//				Scene battleInit = new Scene(gameRoot, 600, 650);
+//				primaryStage.setScene(battleInit);
 				
+				VBox battleField = constructVBox();
+				CheckerBoard cb = CheckerBoard.getInstance();
+				CheckerBoardPane cp = new CheckerBoardPane(cb);
+				battleField.getChildren().addAll(cp, backBtn);
+				cp.setOnMousePressed(new MousePressedAction(cp));
+				cp.setOnMouseReleased(new MouseReleasedAction(cp));
+				BorderPane bp = new BorderPane();
+				bp.setCenter(battleField);
+				Scene battleFieldInit = new Scene(bp, 600, 650);
+				primaryStage.setScene(battleFieldInit);
 				
 //				ChessBoard chessBoard = ChessBoard.getInstance(68.75,25,25);
 //				ChessPane pane = new ChessPane(chessBoard);
