@@ -50,6 +50,9 @@ public class MouseReleasedAction implements EventHandler<MouseEvent> {
 						// Means they moved, set the unit's location to new coordinates
 						if (releasedX < 8 && releasedY < 8) { // If in bounds
 							Unit unitAtReleasedCoords = unitExistsAtCoords(releasedX, releasedY, checkerboardPane);
+							Unit unitAtPath;
+							int x_movement;
+							int y_movement;
 							switch (u.getRole()) {
 							case 0: // Pawn: Move 1 forward
 								int validMovement = (u.getPlayer() == 0 ? 1 : -1); // Player 0: +1. Player 1: -1
@@ -61,8 +64,8 @@ public class MouseReleasedAction implements EventHandler<MouseEvent> {
 										if (unitAtReleasedCoords != null) {
 											validMove = false;
 										}
-									// Moving Diagonal Legal
-									} else if (u.getX() + 1 == releasedX || u.getX() - 1 == releasedX) { 
+										// Moving Diagonal Legal
+									} else if (u.getX() + 1 == releasedX || u.getX() - 1 == releasedX) {
 										if (unitAtReleasedCoords == null) { // No unit there
 											validMove = false;
 										}
@@ -81,52 +84,106 @@ public class MouseReleasedAction implements EventHandler<MouseEvent> {
 								}
 								break;
 							case 2: // Rook: Move infinite X or infinite Y
-								Unit unitAtPath;
 								// Check path
-								int x_movement = releasedX - u.getX();
-								int y_movement = releasedY - u.getY();
-								
-								if(x_movement != 0 && y_movement !=0) {
+								x_movement = releasedX - u.getX();
+								y_movement = releasedY - u.getY();
+
+								if (x_movement != 0 && y_movement != 0) {
 									validMove = false;
-								}
-								else if(x_movement != 0){ // Moving right/left
-									if(u.getX() > releasedX) {
-										for(int x = u.getX()-1; x > releasedX; x--) {
+								} else if (x_movement != 0) { // Moving right/left
+									if (u.getX() > releasedX) {
+										for (int x = u.getX() - 1; x > releasedX; x--) {
 											unitAtPath = unitExistsAtCoords(x, u.getY(), checkerboardPane);
-											if(unitAtPath != null) {
+											if (unitAtPath != null) {
 												validMove = false;
 											}
 										}
-									}
-									else if(u.getX() < releasedX) {
-										for(int x = u.getX()+1; x < releasedY; x++) {
+									} else if (u.getX() < releasedX) {
+										for (int x = u.getX() + 1; x < releasedY; x++) {
 											unitAtPath = unitExistsAtCoords(x, u.getY(), checkerboardPane);
-											if(unitAtPath != null) {
+											if (unitAtPath != null) {
 												validMove = false;
 											}
 										}
 									}
-								}
-								else if(y_movement != 0) { // Moving forward/back
-									if(u.getY() > releasedY) {
-										for(int y = u.getY()-1; y > releasedY; y--) {
+								} else if (y_movement != 0) { // Moving forward/back
+									if (u.getY() > releasedY) {
+										for (int y = u.getY() - 1; y > releasedY; y--) {
 											unitAtPath = unitExistsAtCoords(u.getX(), y, checkerboardPane);
-											if(unitAtPath != null) {
+											if (unitAtPath != null) {
 												validMove = false;
 											}
 										}
-									}
-									else if(u.getY() < releasedY) {
-										for(int y = u.getY()+1; y < releasedY; y++) {
+									} else if (u.getY() < releasedY) {
+										for (int y = u.getY() + 1; y < releasedY; y++) {
 											unitAtPath = unitExistsAtCoords(u.getX(), y, checkerboardPane);
-											if(unitAtPath != null) {
+											if (unitAtPath != null) {
 												validMove = false;
 											}
 										}
 									}
 								}
 								break;
-							case 3: // Bishop: 
+							case 3: // Bishop: Move infinite diagonal
+								// Check path
+								x_movement = releasedX - u.getX(); // end - start
+								y_movement = releasedY - u.getY(); // end - start
+
+								// If not diagonal movement
+								if ((x_movement != 0 && y_movement == 0) || (x_movement == 0 && y_movement != 0)) {
+									validMove = false;
+								} else if (Math.abs(x_movement) == Math.abs(y_movement)) { // Moving diagonal
+									int yCounter;
+									if (x_movement > 0) { // To the right
+										if (y_movement > 0) { // To the bottom
+											yCounter = 1;
+											for (int x = u.getX() + 1; x < releasedX; x++) {
+												unitAtPath = unitExistsAtCoords(x, u.getY() + yCounter,
+														checkerboardPane);
+												if (unitAtPath != null) {
+													validMove = false;
+												}
+												yCounter++;
+											}
+										} else if (y_movement < 0) {
+											yCounter = -1;
+											for (int x = u.getX() + 1; x < releasedX; x++) {
+												unitAtPath = unitExistsAtCoords(x, u.getY() + yCounter,
+														checkerboardPane);
+												if (unitAtPath != null) {
+													validMove = false;
+												}
+												yCounter--;
+											}
+										}
+									} else if (x_movement < 0) { // To the left
+										if (y_movement > 0) { // To the bottom
+											yCounter = 1;
+											for (int x = u.getX() - 1; x > releasedX; x--) {
+												unitAtPath = unitExistsAtCoords(x, u.getY() + yCounter,
+														checkerboardPane);
+												if (unitAtPath != null) {
+													validMove = false;
+												}
+												yCounter++;
+											}
+										} else if (y_movement < 0) { // To the top
+											yCounter = -1;
+											for (int x = u.getX() - 1; x > releasedX; x--) {
+												unitAtPath = unitExistsAtCoords(x, u.getY() + yCounter,
+														checkerboardPane);
+												if (unitAtPath != null) {
+													validMove = false;
+												}
+												yCounter--;
+											}
+										}
+
+									}
+
+								} else {
+									validMove = false;
+								}
 								break;
 							case 4: // Knight:
 								break;
