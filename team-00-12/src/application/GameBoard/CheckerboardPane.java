@@ -31,12 +31,16 @@ public class CheckerboardPane extends Pane {
 
 	// Place the player units onto board (init/reset)
 	public void setUnits() {
-		// Units for player 1
+		// Units for player 0
 		int player = 0;
 		for (int y = 0; y < 2; y++) {
 			for (int x = 0; x < 8; x++) {
-				units.add(new Unit(x, y, player));
-//				System.out.println("new unit: " + x + ", " + y);
+				if(x == 4 && y == 0) { // Add king
+					units.add(new Unit(x, y, player, 2));
+				}
+				else { //Add pawn
+					units.add(new Unit(x, y, player, 0));
+				}
 			}
 		}
 
@@ -44,8 +48,12 @@ public class CheckerboardPane extends Pane {
 		player = 1;
 		for (int y = 6; y < 8; y++) {
 			for (int x = 0; x < 8; x++) {
-				units.add(new Unit(x, y, player));
-//				System.out.println("new unit: " + x + ", " + y);
+				if(x == 4 && y == 7) { //Add king
+					units.add(new Unit(x, y, player, 2));
+				}
+				else { //Add pawn
+					units.add(new Unit(x, y, player, 0));
+				}
 			}
 		}
 	}
@@ -101,10 +109,20 @@ public class CheckerboardPane extends Pane {
 
 			// Determine color of pieces, check which player the unit belongs to
 			if (u.getPlayer() == 0) {
-				r.setFill(Color.WHITE);
+				if(u.getRole() == 2) { // King
+					r.setFill(Color.rgb(235, 0, 27));
+				}
+				else { // Pawn
+					r.setFill(Color.WHITE);
+				}
 				r.setStroke(Color.BLACK);
 			} else {
-				r.setFill(Color.GREY);
+				if(u.getRole() == 2) { // King
+					r.setFill(Color.rgb(247, 158, 27));
+				}
+				else { // Pawn
+					r.setFill(Color.GREY);
+				}
 				r.setStroke(Color.BLACK);
 			}
 

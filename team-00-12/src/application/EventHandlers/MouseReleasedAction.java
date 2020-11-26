@@ -5,19 +5,25 @@ import application.GameBoard.Checkerboard;
 import application.GameBoard.CheckerboardPane;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 import view.ChessBoard;
 import view.ChessPane;
 import entity.Piece.ChessPiece;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import entity.PieceType;
 
 // Used for unit movement (moving the selected unit to a tile)
 public class MouseReleasedAction implements EventHandler<MouseEvent> {
 	private CheckerboardPane checkerboardPane;
+	private Stage primaryStage;
+	private Scene welcomeScene;
 
 	// Constructor
-	public MouseReleasedAction(CheckerboardPane checkerboardPane) {
+	public MouseReleasedAction(CheckerboardPane checkerboardPane, Stage primaryStage, Scene welcomeScene) {
 		this.checkerboardPane = checkerboardPane;
+		this.primaryStage = primaryStage;
+		this.welcomeScene = welcomeScene;
 	}
 
 	// Main Handler
@@ -31,7 +37,7 @@ public class MouseReleasedAction implements EventHandler<MouseEvent> {
 		int releasedX = (int) ((e.getX() - checkerboard.getInitX()) / (tileSize));
 		int releasedY = (int) ((e.getY() - checkerboard.getInitY()) / (tileSize));
 
-		boolean validMove = false;
+		boolean validMove = true;
 		Unit unitToRemove = null;
 
 		// Check all units to see which one is selected, then determine validity of
@@ -42,19 +48,118 @@ public class MouseReleasedAction implements EventHandler<MouseEvent> {
 					// If the player did not just click and release on the same tile
 					if (!((u.getX() == releasedX) && (u.getY() == releasedY))) {
 						// Means they moved, set the unit's location to new coordinates
-						validMove = true;
-						Unit unitAtReleasedCoords = unitExistsAtCoords(releasedX, releasedY, checkerboardPane);
-						if (unitAtReleasedCoords != null) { // Check if unit exists at coords that unit wants to move to
-							// Check the unit's player
-							if (unitAtReleasedCoords.getPlayer() == u.getPlayer()) { // If own player's unit, invalid
-																						// move
-								System.out.println("Invalid move: Player's own unit exists at destination.");
-								validMove = false;
-							} else { // Enemy unit, remove the enemy unit from the set
-								System.out.println("Player " + checkerboard.getEnemyPlayer() + " ("
-										+ checkerboard.getEnemyPlayerToString() + ")" + " unit down!");
-								unitToRemove = unitAtReleasedCoords;
+						if (releasedX < 8 && releasedY < 8) { // If in bounds
+							Unit unitAtReleasedCoords = unitExistsAtCoords(releasedX, releasedY, checkerboardPane);
+							switch (u.getRole()) {
+							case 0: // Pawn: Move 1 forward
+								int validMovement = (u.getPlayer() == 0 ? 1 : -1); // Player 0: +1. Player 1: -1
+								if (u.getY() + validMovement != releasedY) { // If not one move forward...
+									validMove = false;
+									System.out.println("Invalid Move: Pawn's move one forward.");
+								} else { // Move is valid
+									if (u.getX() == releasedX) { // Moving forward
+										if (unitAtReleasedCoords != null) {
+											validMove = false;
+										}
+									// Moving Diagonal Legal
+									} else if (u.getX() + 1 == releasedX || u.getX() - 1 == releasedX) { 
+										if (unitAtReleasedCoords == null) { // No unit there
+											validMove = false;
+										}
+									} else {
+										validMove = false;
+									}
+								}
+								break;
+							case 1: // King: Move 1 anywhere
+								// If not one move any direction...
+								if ((Math.abs(releasedY - u.getY()) > 1) || (Math.abs(releasedX - u.getX()) > 1)) {
+									validMove = false;
+									System.out.println("Invalid Move: The fat king cannot move more than one step.");
+								} else { // Move is valid
+
+								}
+								break;
+							case 2: // Rook: Move infinite X or infinite Y
+								Unit unitAtPath;
+								// Check path
+								int x_movement = releasedX - u.getX();
+								int y_movement = releasedY - u.getY();
+								
+								if(x_movement != 0 && y_movement !=0) {
+									validMove = false;
+								}
+								else if(x_movement != 0){ // Moving right/left
+									if(u.getX() > releasedX) {
+										for(int x = u.getX()-1; x > releasedX; x--) {
+											unitAtPath = unitExistsAtCoords(x, u.getY(), checkerboardPane);
+											if(unitAtPath != null) {
+												validMove = false;
+											}
+										}
+									}
+									else if(u.getX() < releasedX) {
+										for(int x = u.getX()+1; x < releasedY; x++) {
+											unitAtPath = unitExistsAtCoords(x, u.getY(), checkerboardPane);
+											if(unitAtPath != null) {
+												validMove = false;
+											}
+										}
+									}
+								}
+								else if(y_movement != 0) { // Moving forward/back
+									if(u.getY() > releasedY) {
+										for(int y = u.getY()-1; y > releasedY; y--) {
+											unitAtPath = unitExistsAtCoords(u.getX(), y, checkerboardPane);
+											if(unitAtPath != null) {
+												validMove = false;
+											}
+										}
+									}
+									else if(u.getY() < releasedY) {
+										for(int y = u.getY()+1; y < releasedY; y++) {
+											unitAtPath = unitExistsAtCoords(u.getX(), y, checkerboardPane);
+											if(unitAtPath != null) {
+												validMove = false;
+											}
+										}
+									}
+								}
+								break;
+							case 3: // Bishop: 
+								break;
+							case 4: // Knight:
+								break;
+							case 5: // Queen: Move anything
 							}
+
+							if (unitAtReleasedCoords != null) { // Check if unit exists at coords that unit wants to
+																// move to
+								// Check the unit's player
+								if (unitAtReleasedCoords.getPlayer() == u.getPlayer()) { // If own player's unit,
+																							// invalid
+																							// move
+									System.out.println("Invalid move: Player's own unit exists at destination.");
+									validMove = false;
+								} else { // Enemy unit, remove the enemy unit from the set
+									if (unitAtReleasedCoords.isKing()) {
+										System.out.println("Game Over!");
+										primaryStage.setScene(welcomeScene);
+										primaryStage.show();
+										break;
+									} else {
+										if (validMove == false) {
+											break;
+										} else {
+											System.out.println("Player " + checkerboard.getEnemyPlayer() + " ("
+													+ checkerboard.getEnemyPlayerToString() + ")" + " unit down!");
+										}
+									}
+									unitToRemove = unitAtReleasedCoords;
+								}
+							}
+						} else { // Out of bounds
+							validMove = false;
 						}
 						if (validMove) {
 							u.setX(releasedX);
@@ -90,7 +195,6 @@ public class MouseReleasedAction implements EventHandler<MouseEvent> {
 			}
 		}
 		return unitAtCoords;
-
 	}
 
 	/* Not used */

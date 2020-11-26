@@ -107,7 +107,7 @@ public class Main extends Application {
 				CheckerboardPane checkerboardPane = new CheckerboardPane(checkerboard);
 				battleField.getChildren().addAll(checkerboardPane, backBtn);
 				checkerboardPane.setOnMousePressed(new MousePressedAction(checkerboardPane));
-				checkerboardPane.setOnMouseReleased(new MouseReleasedAction(checkerboardPane));
+				checkerboardPane.setOnMouseReleased(new MouseReleasedAction(checkerboardPane, primaryStage, welcomeScene));
 				BorderPane bp = new BorderPane();
 				bp.setCenter(battleField);
 				Scene battleFieldInit = new Scene(bp, 600, 650);

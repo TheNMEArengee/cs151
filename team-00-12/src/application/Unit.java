@@ -5,15 +5,17 @@ public class Unit {
 	private int x;
 	private int y;
 	private int player;
+	private int role;
 	private String color;
 	private boolean selected;
 
 	// Constructor
-	public Unit(int x, int y, int player) {
+	public Unit(int x, int y, int player, int role) {
 		this.x = x;
 		this.y = y;
 		this.player = player;
 		this.color = (this.player == 0) ? "White" : "Black"; // 0 = White, 1 = Black
+		this.role = role; //0 = Pawn, 1 = King
 		selected = false;
 	}
 
@@ -50,6 +52,14 @@ public class Unit {
 		}
 		return "Error";
 	}
+	
+	public boolean isKing() {
+		return this.role == 1 ? true : false;
+	}
+	
+	public int getRole() {
+		return this.role;
+	}
 
 	public void setSelected(boolean b) {
 		this.selected = b;
@@ -58,5 +68,4 @@ public class Unit {
 	public boolean isSelected() {
 		return this.selected;
 	}
-
 }
