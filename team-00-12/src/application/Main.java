@@ -69,7 +69,6 @@ public class Main extends Application {
 			VBox vbox = constructVBox();
 			vbox.setPadding(new Insets(10, 10, 10, 10));
 			vbox.getChildren().addAll(titleLbl, startBtn, tutorialBtn, quitBtn);
-
 			BorderPane root = new BorderPane();
 			root.setCenter(vbox);
 
@@ -115,24 +114,6 @@ public class Main extends Application {
 				primaryStage.show();
 //				System.out.println("-----------\nStart!\nPlayer " +cb.getCurrPlayer() + " turn");
 
-				/* Jason's Friend */
-//				ChessBoard chessBoard = ChessBoard.getInstance(68.75,25,25);
-//				ChessPane pane = new ChessPane(chessBoard);
-//				
-//				pane.setOnMousePressed(new PressedAction(pane));
-//				pane.setOnMouseReleased(new ReleaseAction(pane));
-//
-//				BorderPane borderPane = new BorderPane();
-//				borderPane.setCenter(pane);
-//				HBox hBox = new HBox();
-//				hBox.setAlignment(Pos.TOP_CENTER);
-//				Button button = new Button("Return");
-//				button.setOnAction(new ResetAction(pane));
-//				hBox.getChildren().add(button);
-//				hBox.getChildren().add(backBtn);
-//				borderPane.setBottom(hBox);
-//				Scene scene = new Scene(borderPane,600,600);
-//				primaryStage.setScene(scene);
 			});
 
 			// Event for tutorial button. Brings up the tutorial section for the game.

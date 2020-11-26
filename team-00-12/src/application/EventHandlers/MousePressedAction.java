@@ -39,5 +39,4 @@ public class MousePressedAction implements EventHandler<MouseEvent> {
 			}
 		});
 	}
-
 }

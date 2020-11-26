@@ -6,6 +6,8 @@ public class Checkerboard {
 	private int rows;
 	private int cols;
 	private int tileSize; // Size of each tile on checker board
+	private int cardSizeX;
+	private int cardSizeY;
 	private int currPlayer; // Player 0 or 1
 
 	// initX and initY supposed to be used to move the drawn board
@@ -18,6 +20,8 @@ public class Checkerboard {
 		this.rows = 8;
 		this.cols = 8;
 		this.tileSize = 60;
+		this.cardSizeX = 60;
+		this.cardSizeY = 120;
 		this.currPlayer = 0;
 		this.initX = 0;
 		this.initY = 0;
@@ -47,6 +51,14 @@ public class Checkerboard {
 
 	public int getTileSize() {
 		return this.tileSize;
+	}
+	
+	public int getCardSizeX() {
+		return this.cardSizeX;
+	}
+	
+	public int getCardSizeY() {
+		return this.cardSizeY;
 	}
 
 	public int getCurrPlayer() {
