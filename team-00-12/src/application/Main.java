@@ -69,7 +69,6 @@ public class Main extends Application {
 			VBox vbox = constructVBox();
 			vbox.setPadding(new Insets(10, 10, 10, 10));
 			vbox.getChildren().addAll(titleLbl, startBtn, tutorialBtn, quitBtn);
-
 			BorderPane root = new BorderPane();
 			root.setCenter(vbox);
 
