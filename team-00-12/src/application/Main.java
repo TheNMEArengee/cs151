@@ -109,7 +109,7 @@ public class Main extends Application {
 				checkerboardPane.setOnMouseReleased(new MouseReleasedAction(checkerboardPane, primaryStage, welcomeScene));
 				BorderPane bp = new BorderPane();
 				bp.setCenter(battleField);
-				Scene battleFieldInit = new Scene(bp, 600, 650);
+				Scene battleFieldInit = new Scene(bp, 800, 650);
 				primaryStage.setScene(battleFieldInit);
 				primaryStage.show();
 //				System.out.println("-----------\nStart!\nPlayer " +cb.getCurrPlayer() + " turn");

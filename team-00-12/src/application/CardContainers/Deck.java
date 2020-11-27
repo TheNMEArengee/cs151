@@ -1,14 +1,19 @@
-package application;
+package application.CardContainers;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Queue;
 
-public class Deck {
+import application.Affiliation;
+import application.Card;
+
+public class Deck{
 	private Queue<Card> deck;
 
 
-	public Deck(Queue<Card> deck) {
-		this.deck = deck;
+	public Deck() {
+		
+		this.deck = new LinkedList<Card>();
 	}
 	
 	

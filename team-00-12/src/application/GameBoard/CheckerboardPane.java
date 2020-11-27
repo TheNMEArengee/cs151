@@ -2,21 +2,24 @@ package application.GameBoard;
 
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Random;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
 
 import application.Unit;
+import application.CardContainers.Deck;
+import application.CardContainers.Hand;
 import application.Affiliation;
 import application.Card;
-import application.Deck;
-import application.Hand;
 import javafx.scene.Group;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import javafx.scene.input.MouseEvent;
 
 //Checkerboard field's controller basically
@@ -24,7 +27,7 @@ public class CheckerboardPane extends Pane {
 	private Set<Unit> units; 				// Player's pawns, or units
 	private Hand player0Hand; 				// Player 0's hand
 	private Hand player1Hand; 				// Player 1's hand
-	//	private Deck deck; 						// Shared player deck
+	private Deck deck; 						// Shared player deck
 	private Checkerboard checkerboard; 		// Checkerboard instance
 	private GridPane checkerboardGridPane; 	// Grid to place the checkerboard
 	private Group tileGroup; 				// For checkerboard tiles
@@ -40,10 +43,7 @@ public class CheckerboardPane extends Pane {
 		this.units = new HashSet<>();
 		this.player0Hand = new Hand(Affiliation.WHITE);
 		this.player1Hand = new Hand(Affiliation.BLACK);
-
-		//WIP
-		//		this.deck = new Deck();
-
+		this.deck = new Deck();
 		setUnits();
 		setCards();
 		draw();
@@ -83,7 +83,8 @@ public class CheckerboardPane extends Pane {
 	public void setCards() {
 		ArrayList<Card> hand0 = new ArrayList<Card>();
 		ArrayList<Card> hand1 = new ArrayList<Card>();
-		//		Queue<Card>		deck = new Queue<Card>();
+		ArrayList<Card>	deck = new ArrayList<Card>();
+		Random rand = new Random();
 
 
 		// Cards in player 0 hand
@@ -91,26 +92,26 @@ public class CheckerboardPane extends Pane {
 
 		for(int numOfCards = 0; numOfCards < 5; numOfCards++) {
 
-			hand0.add(new Card(Affiliation.WHITE, 0));
+			hand0.add(new Card(Affiliation.WHITE, rand.nextInt(5)));
 		}
 
 
 		//Cards in player 1 hand
 		player = 1;
 		for(int numOfCards = 0; numOfCards < 5; numOfCards++) {
-			hand1.add(new Card(Affiliation.BLACK, 0));
+			hand1.add(new Card(Affiliation.BLACK, rand.nextInt(5)));
 		}
 
 
 		// Cards in deck
-		//		for(int numOfCards = 0; numOfCards < 21; numOfCards++) {
-		//			deck.add(new Card(Affiliation.DECK, 0));
-		//		}
+		for(int numOfCards = 0; numOfCards < 21; numOfCards++) {
+			deck.add(new Card(Affiliation.DECK, rand.nextInt(5)));
+		}
 
 
 		player0Hand.addAll(hand0);
 		player1Hand.addAll(hand1);
-		//		this.deck.addAll(deck);
+		this.deck.addAll(deck);
 	}
 
 
@@ -193,18 +194,9 @@ public class CheckerboardPane extends Pane {
 		int cardSizeX = checkerboard.getCardSizeX();
 		int cardSizeY = checkerboard.getCardSizeY();
 
-		// Traverse entire "units" set
-
 
 		//Draw player 0 hand
-		for(Card c : player0Hand.getHand()) {
-
-			// If we ever want to draw something to symbolize "Selected" visually
-			//				if (u.isSelected()) {
-			//					System.out.println("Selected: " + u.getX() + ", " + u.getY());
-			//				}
-
-			// Rectangle(x coord, y coord, width, height)		
+		for(Card c : player0Hand.getHand()) {		
 			int handPosition = player0Hand.getHand().indexOf(c);
 			int x = 10 + (tileSize * 8) + (handPosition * cardSizeX);
 			int y = 10;
@@ -221,17 +213,16 @@ public class CheckerboardPane extends Pane {
 			r.setFill(Color.WHITE);
 			r.setStroke(Color.BLACK);
 			tileGroup.getChildren().add(r);
+			
+			
+			//Generating card text for player 0 cards
+			Text t = new Text(x + 13, y + 60, c.getMovementTypeID() + "");
+			tileGroup.getChildren().add(t);
 		}
 
 
 		//Draw player 1 hand
-		for(Card c : player1Hand.getHand()) {
-			// If we ever want to draw something to symbolize "Selected" visually
-			//				if (u.isSelected()) {
-			//					System.out.println("Selected: " + u.getX() + ", " + u.getY());
-			//				}
-
-			// Rectangle(x coord, y coord, width, height)		
+		for(Card c : player1Hand.getHand()) {	
 			int handPosition = player1Hand.getHand().indexOf(c);
 			int x = 10 + (tileSize * 8) + (handPosition * cardSizeX);
 			int y = 10 + (tileSize * 6);
@@ -248,14 +239,22 @@ public class CheckerboardPane extends Pane {
 			r.setFill(Color.GREY);
 			r.setStroke(Color.BLACK);
 			tileGroup.getChildren().add(r);
+			
+			
+			//Generating card text for player 1 cards
+			Text t = new Text(x + 13, y + 60, c.getMovementTypeID() + "");
+			tileGroup.getChildren().add(t);
 		}
 
-			Rectangle deck = new Rectangle(10 + 480 ,10 + 180 , cardSizeX, cardSizeY);
-			deck.setFill(Color.AQUA);
-			deck.setStroke(Color.BLACK);
-			deck.setArcWidth(20);
-			deck.setArcHeight(20);
-			tileGroup.getChildren().add(deck);
+		//Draw the deck
+		Rectangle deck = new Rectangle(10 + (tileSize * 8), 10 + (tileSize * 3), cardSizeX, cardSizeY);
+		deck.setFill(Color.AQUA);
+		deck.setStroke(Color.BLACK);
+		deck.setArcWidth(20);
+		deck.setArcHeight(20);
+		tileGroup.getChildren().add(deck);
+		Text deckText = new Text(10 + (tileSize * 8) + 13, 10 + (tileSize * 3) + 60, "Deck");
+		tileGroup.getChildren().add(deckText);
 	}
 
 	/* Get methods */

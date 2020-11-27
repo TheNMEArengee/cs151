@@ -1,9 +1,14 @@
 package application;
 
+import javafx.scene.image.Image;
+
 public class Card {
 	private Affiliation affiliation;
 	private boolean selected;
 	private int movementTypeID;
+	private String title;
+	private String description;
+	private Image image; 
 	
 	
 		// Constructor
@@ -33,5 +38,17 @@ public class Card {
 
 		public boolean isSelected() {
 			return this.selected;
+		}
+		
+		public String getTitle() {
+			return this.title;
+		}
+		
+		public String getDescription() {
+			return this.description;
+		}
+		
+		public Image getImage() {
+			return this.image;
 		}
 }
