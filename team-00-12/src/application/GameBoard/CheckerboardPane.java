@@ -56,7 +56,7 @@ public class CheckerboardPane extends Pane {
 		for (int y = 0; y < 2; y++) {
 			for (int x = 0; x < 8; x++) {
 				if(x == 4 && y == 0) { // Add king
-					units.add(new Unit(x, y, player, 2));
+					units.add(new Unit(x, y, player, 3));
 				}
 				else { //Add pawn
 					units.add(new Unit(x, y, player, 0));
@@ -69,7 +69,7 @@ public class CheckerboardPane extends Pane {
 		for (int y = 6; y < 8; y++) {
 			for (int x = 0; x < 8; x++) {
 				if(x == 4 && y == 7) { //Add king
-					units.add(new Unit(x, y, player, 2));
+					units.add(new Unit(x, y, player, 3));
 				}
 				else { //Add pawn
 					units.add(new Unit(x, y, player, 0));
@@ -167,7 +167,7 @@ public class CheckerboardPane extends Pane {
 
 			// Determine color of pieces, check which player the unit belongs to
 			if (u.getPlayer() == 0) {
-				if(u.getRole() == 2) { // King
+				if(u.getRole() == 3) { // King
 					r.setFill(Color.rgb(235, 0, 27));
 				}
 				else { // Pawn
@@ -175,7 +175,7 @@ public class CheckerboardPane extends Pane {
 				}
 				r.setStroke(Color.BLACK);
 			} else {
-				if(u.getRole() == 2) { // King
+				if(u.getRole() == 3) { // King
 					r.setFill(Color.rgb(247, 158, 27));
 				}
 				else { // Pawn
