@@ -4,9 +4,7 @@ import javafx.scene.paint.Color;
 
 import java.io.IOException;
 
-import Controller.PressedAction;
-import Controller.ReleaseAction;
-import Controller.ResetAction;
+
 import application.EventHandlers.MousePressedAction;
 import application.EventHandlers.MouseReleasedAction;
 import application.GameBoard.Checkerboard;
@@ -24,8 +22,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import view.ChessBoard;
-import view.ChessPane;
 import javafx.scene.Group;
 import javafx.scene.layout.GridPane;
 import javafx.scene.Parent;
@@ -182,13 +178,6 @@ public class Main extends Application {
 		return c;
 	}
 
-	// Constructs an HBox with the dimensions specified below (Not used yet)
-	private HBox constructHBox() {
-		HBox hbox = new HBox();
-		// WIP
-
-		return hbox;
-	}
 
 	// Constructs a VBox with the dimensions specified below
 	private VBox constructVBox() {
@@ -199,32 +188,6 @@ public class Main extends Application {
 		return vbox;
 	}
 
-	// NOT USED
-	public void goToGame(ActionEvent event) throws IOException {
-
-		ChessBoard chessBoard = ChessBoard.getInstance(68.75, 25, 25);
-		ChessPane pane = new ChessPane(chessBoard);
-		pane.setOnMousePressed(new PressedAction(pane));
-
-		pane.setOnMouseReleased(new ReleaseAction(pane));
-
-		BorderPane borderPane = new BorderPane();
-		borderPane.setCenter(pane);
-		HBox hBox = new HBox();
-		hBox.setAlignment(Pos.TOP_CENTER);
-		Button button = new Button("Regret");
-		button.setOnAction(new ResetAction(pane));
-		Button button1 = new Button("back");
-
-		hBox.getChildren().add(button);
-		hBox.getChildren().add(button1);
-		borderPane.setBottom(hBox);
-		Scene scene = new Scene(borderPane, 600, 600);
-		Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
-		window.setScene(scene);
-		window.setTitle("Chess");
-		window.show();
-	}
 
 	public static void main(String[] args) {
 		launch(args);

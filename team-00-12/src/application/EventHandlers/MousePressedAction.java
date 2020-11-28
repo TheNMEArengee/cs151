@@ -5,8 +5,7 @@ import application.GameBoard.CheckerboardPane;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.media.MediaPlayer;
-import view.ChessBoard;
-import view.ChessPane;
+
 
 // Used for unit movement (selecting unit to move)
 public class MousePressedAction implements EventHandler<MouseEvent> {

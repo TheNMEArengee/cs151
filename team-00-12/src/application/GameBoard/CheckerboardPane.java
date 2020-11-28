@@ -52,7 +52,7 @@ public class CheckerboardPane extends Pane {
 		this.deck = new Deck();
 		setUnits();
 		setCards();
-		canvas = new Canvas(800,450);
+		canvas = new Canvas(800,480);
 		gc = canvas.getGraphicsContext2D();
 		draw();
 	}

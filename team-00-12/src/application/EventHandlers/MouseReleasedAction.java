@@ -6,12 +6,9 @@ import application.GameBoard.CheckerboardPane;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import view.ChessBoard;
-import view.ChessPane;
-import entity.Piece.ChessPiece;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import entity.PieceType;
+
 
 // Used for unit movement (moving the selected unit to a tile)
 public class MouseReleasedAction implements EventHandler<MouseEvent> {
