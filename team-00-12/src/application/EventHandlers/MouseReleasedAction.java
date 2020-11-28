@@ -186,46 +186,114 @@ public class MouseReleasedAction implements EventHandler<MouseEvent> {
 								}
 								break;
 							case 4: // Knight:
-								//Up 2 + (Right, left)
-								//Down 2 + (right left)
-								//Right 2 + (top, down)
-								//Left 2 + (top, down)
 								x_movement = Math.abs(releasedX - u.getX()); // end - start
 								y_movement = Math.abs(releasedY - u.getY()); // end - start
 								//Essentially we are just checking if the piece goes one direction
 								//2 spots and 1 direction another, then we are okay
-								System.out.println("Knight: "+ releasedX + ", " + releasedY);
-								System.out.println("Knight x, y: "+ x_movement + ", " + y_movement);
-//								if(x_movement == 2 && y_movement == 1) { // Valid knight move
-//								}
-//								else if(x_movement == 1 && y_movement == 2) { //Also valid knight move
-//								}
-//								else { //Invalid
-//									validMove = false;
-//								}
-								if(x_movement == 1 && y_movement == 2) {
-									System.out.println("What");
-								}
-								
-								if((x_movement != 1 && y_movement != 2)) { // Invalid
-									System.out.println("Not 1 not 2");
-									validMove = false;
-								}
-								else if(x_movement != 2 && y_movement != 1) {
-									System.out.println("Not 1 not 2");
-									validMove = false;
-								}
-								else { // Valid, check to if unit at path is ally or opponent
+								if((x_movement == 1 && y_movement == 2) || (x_movement == 2 && y_movement == 1)) {
+									// Valid, check to if unit at path is ally or opponent
 									System.out.println("Else");
 									unitAtPath = unitExistsAtCoords(releasedX, releasedY, checkerboardPane);
-									if(unitAtPath.getColor() == u.getColor()) { // If unit at path is the player's own unit
-										System.out.println("Unit get color");
-										validMove = false;
+									if(unitAtPath != null) {
+										if(unitAtPath.getColor() == u.getColor()) { // If unit at path is the player's own unit
+											System.out.println("Unit get color");
+											validMove = false;
+										}
 									}
+								}
+								else {
+									validMove = false;
 								}
 								
 								break;
-							case 5: // Queen: Move anything
+							case 5: // Queen: Combo of Rook + Bishop
+								x_movement = releasedX - u.getX();
+								y_movement = releasedY - u.getY();
+
+								if (x_movement != 0 && y_movement == 0) { // Moving right/left
+									if (u.getX() > releasedX) {
+										for (int x = u.getX() - 1; x > releasedX; x--) {
+											unitAtPath = unitExistsAtCoords(x, u.getY(), checkerboardPane);
+											if (unitAtPath != null) {
+												validMove = false;
+											}
+										}
+									} else if (u.getX() < releasedX) {
+										for (int x = u.getX() + 1; x < releasedY; x++) {
+											unitAtPath = unitExistsAtCoords(x, u.getY(), checkerboardPane);
+											if (unitAtPath != null) {
+												validMove = false;
+											}
+										}
+									}
+								} else if (y_movement != 0 && x_movement == 0) { // Moving forward/back
+									if (u.getY() > releasedY) {
+										for (int y = u.getY() - 1; y > releasedY; y--) {
+											unitAtPath = unitExistsAtCoords(u.getX(), y, checkerboardPane);
+											if (unitAtPath != null) {
+												validMove = false;
+											}
+										}
+									} else if (u.getY() < releasedY) {
+										for (int y = u.getY() + 1; y < releasedY; y++) {
+											unitAtPath = unitExistsAtCoords(u.getX(), y, checkerboardPane);
+											if (unitAtPath != null) {
+												validMove = false;
+											}
+										}
+									}
+								} else if (Math.abs(x_movement) == Math.abs(y_movement)) { // Moving diagonal
+									int yCounter;
+									if (x_movement > 0) { // To the right
+										if (y_movement > 0) { // To the bottom
+											yCounter = 1;
+											for (int x = u.getX() + 1; x < releasedX; x++) {
+												unitAtPath = unitExistsAtCoords(x, u.getY() + yCounter,
+														checkerboardPane);
+												if (unitAtPath != null) {
+													validMove = false;
+												}
+												yCounter++;
+											}
+										} else if (y_movement < 0) {
+											yCounter = -1;
+											for (int x = u.getX() + 1; x < releasedX; x++) {
+												unitAtPath = unitExistsAtCoords(x, u.getY() + yCounter,
+														checkerboardPane);
+												if (unitAtPath != null) {
+													validMove = false;
+												}
+												yCounter--;
+											}
+										}
+									} else if (x_movement < 0) { // To the left
+										if (y_movement > 0) { // To the bottom
+											yCounter = 1;
+											for (int x = u.getX() - 1; x > releasedX; x--) {
+												unitAtPath = unitExistsAtCoords(x, u.getY() + yCounter,
+														checkerboardPane);
+												if (unitAtPath != null) {
+													validMove = false;
+												}
+												yCounter++;
+											}
+										} else if (y_movement < 0) { // To the top
+											yCounter = -1;
+											for (int x = u.getX() - 1; x > releasedX; x--) {
+												unitAtPath = unitExistsAtCoords(x, u.getY() + yCounter,
+														checkerboardPane);
+												if (unitAtPath != null) {
+													validMove = false;
+												}
+												yCounter--;
+											}
+										}
+
+									}
+
+								} else {
+									validMove = false;
+								}
 							}
 
 							if (unitAtReleasedCoords != null) { // Check if unit exists at coords that unit wants to
