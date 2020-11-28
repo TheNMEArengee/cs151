@@ -11,6 +11,7 @@ import java.util.Set;
 
 import application.Unit;
 import application.CardContainers.Deck;
+import application.CardContainers.Effect;
 import application.CardContainers.Hand;
 import application.Affiliation;
 import application.Card;
@@ -22,6 +23,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.input.MouseEvent;
 
@@ -51,8 +53,8 @@ public class CheckerboardPane extends Pane {
 		this.deck = new Deck();
 		setUnits();
 		setCards();
-		 canvas = new Canvas(800,450);
-	     gc = canvas.getGraphicsContext2D();
+		canvas = new Canvas(800,450);
+		gc = canvas.getGraphicsContext2D();
 		draw();
 	}
 
@@ -63,7 +65,7 @@ public class CheckerboardPane extends Pane {
 		for (int y = 0; y < 2; y++) {
 			for (int x = 0; x < 8; x++) {
 				if(x == 4 && y == 0) { // Add king
-					units.add(new Unit(x, y, player, 5));
+					units.add(new Unit(x, y, player, 3));
 				}
 				else { //Add pawn
 					units.add(new Unit(x, y, player, 0));
@@ -76,7 +78,7 @@ public class CheckerboardPane extends Pane {
 		for (int y = 6; y < 8; y++) {
 			for (int x = 0; x < 8; x++) {
 				if(x == 4 && y == 7) { //Add king
-					units.add(new Unit(x, y, player, 5));
+					units.add(new Unit(x, y, player, 3));
 				}
 				else { //Add pawn
 					units.add(new Unit(x, y, player, 0));
@@ -171,7 +173,7 @@ public class CheckerboardPane extends Pane {
 
 			// Determine color of pieces, check which player the unit belongs to
 			if (u.getPlayer() == 0) {
-				if(u.getRole() == 5) { // King
+				if(u.getRole() == 3) { // King
 					r.setFill(Color.rgb(235, 0, 27));
 				}
 				else { // Pawn
@@ -179,7 +181,7 @@ public class CheckerboardPane extends Pane {
 				}
 				r.setStroke(Color.BLACK);
 			} else {
-				if(u.getRole() == 5) { // King
+				if(u.getRole() == 3) { // King
 					r.setFill(Color.rgb(247, 158, 27));
 				}
 				else { // Pawn
@@ -217,13 +219,13 @@ public class CheckerboardPane extends Pane {
 			r.setFill(Color.WHITE);
 			r.setStroke(Color.BLACK);
 			tileGroup.getChildren().add(r);
-			
-			
+
+
 			//Generating card text for player 0 cards
 			Text t = new Text(x + 10, y + 20, c.getTitle() + "");
 			tileGroup.getChildren().add(t);
-			
-			
+
+
 			//Generating images for player 1 cards
 			Image i = c.getImage();
 			gc.drawImage(i, x + 5, y + 30);
@@ -248,13 +250,13 @@ public class CheckerboardPane extends Pane {
 			r.setFill(Color.GREY);
 			r.setStroke(Color.BLACK);
 			tileGroup.getChildren().add(r);
-			
-			
+
+
 			//Generating card text for player 1 cards
 			Text t = new Text(x + 10, y + 20, c.getTitle() + "");
 			tileGroup.getChildren().add(t);
-			
-			
+
+
 			//Generating images for player 1 cards
 			Image i = c.getImage();
 			gc.drawImage(i, x + 5, y + 30);
@@ -263,8 +265,6 @@ public class CheckerboardPane extends Pane {
 		/*
 		 * Draw the deck
 		 */
-		
-		
 		//Deck rectangle
 		Rectangle deck = new Rectangle(10 + (tileSize * 8), 10 + (tileSize * 3), cardSizeX, cardSizeY);
 		deck.setFill(Color.AQUA);
@@ -272,16 +272,87 @@ public class CheckerboardPane extends Pane {
 		deck.setArcWidth(20);
 		deck.setArcHeight(20);
 		tileGroup.getChildren().add(deck);
-		
-		
+
+
 		//Deck text
 		Text deckText = new Text(10 + (tileSize * 8) + 10, 10 + (tileSize * 3) + 20, "Deck");
 		tileGroup.getChildren().add(deckText);
-		
-		
+
+
 		//Deck Image
 		Image i = new Image("img/pileofshitpawn.png", 50, 50, true, true);
 		gc.drawImage(i, 10 + (tileSize * 8) + 5, 10 + (tileSize * 3) + 30);
+
+
+		/*
+		 * Test Code for drawEnlargedCard()
+		 * This is identical to the code in the method, except the card details is set to specifically King
+		 */
+//		ArrayList<String> cardDetails = Effect.getEffect(4);
+//		Rectangle r = new Rectangle(10 + (checkerboard.getTileSize() * 8) + (3 * checkerboard.getCardSizeX()), 135, checkerboard.getCardSizeX() * 2, checkerboard.getCardSizeY() * 2 - 10);
+//
+//
+//		// Determine color of pieces, check which player the unit belongs to
+//		r.setFill(Color.WHITE);
+//		r.setStroke(Color.BLACK);
+//		// Rounded edges for units
+//		r.setArcWidth(20);
+//		r.setArcHeight(20);
+//		tileGroup.getChildren().add(r);
+//
+//
+//		//Title text
+//		Text title = new Text(10 + (checkerboard.getTileSize() * 8) + (3 * checkerboard.getCardSizeX()) + 20, 175, cardDetails.get(0));
+//		title.setUnderline(true);
+//		title.setFont(new Font("Happy Monkey", 30));
+//		tileGroup.getChildren().add(title);
+//
+//
+//		//Image
+//		Image image = new Image(cardDetails.get(2), 100, 100, true, true);
+//		gc.drawImage(image, 10 + (checkerboard.getTileSize() * 8) + (3 * checkerboard.getCardSizeX()) + 10, 182);
+//
+//
+//		//Description text
+//		Text description = new Text((checkerboard.getTileSize() * 8) + (3 * checkerboard.getCardSizeX()) + 20, 300, cardDetails.get(1));
+//		description.setWrappingWidth(100);
+//		tileGroup.getChildren().add(description);
+	}
+
+
+	//Draws the card that is hovered over by the mouse
+	public void drawEnlargedCard(int ID, Affiliation affiliation) {
+		ArrayList<String> cardDetails = Effect.getEffect(ID);
+
+
+		//Rectangle
+		Rectangle r = new Rectangle(10 + (checkerboard.getTileSize() * 8) + (3 * checkerboard.getCardSizeX()), 135, checkerboard.getCardSizeX() * 2, checkerboard.getCardSizeY() * 2 - 10);
+		if(affiliation == Affiliation.WHITE) {
+			r.setFill(Color.WHITE);
+		}
+		else {
+			r.setFill(Color.GREY);
+		}
+		r.setStroke(Color.BLACK);
+
+
+		// Rounded edges for units
+		r.setArcWidth(20);
+		r.setArcHeight(20);
+		tileGroup.getChildren().add(r);
+
+
+		//Title text
+		Text title = new Text(10 + (checkerboard.getTileSize() * 8) + (3 * checkerboard.getCardSizeX()) + 20, 175, cardDetails.get(0));
+		title.setUnderline(true);
+		title.setFont(new Font("Happy Monkey", 30));
+		tileGroup.getChildren().add(title);
+
+
+		//Description text
+		Text description = new Text((checkerboard.getTileSize() * 8) + (3 * checkerboard.getCardSizeX()) + 20, 300, cardDetails.get(1));
+		description.setWrappingWidth(100);
+		tileGroup.getChildren().add(description);
 	}
 
 	/* Get methods */

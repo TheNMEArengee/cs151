@@ -185,7 +185,7 @@ public class MouseReleasedAction implements EventHandler<MouseEvent> {
 									validMove = false;
 								}
 								break;
-							case 4: // Knight:
+							case 4: // Knight: Move in L shapes
 								x_movement = Math.abs(releasedX - u.getX()); // end - start
 								y_movement = Math.abs(releasedY - u.getY()); // end - start
 								//Essentially we are just checking if the piece goes one direction
