@@ -188,23 +188,23 @@ public class MouseReleasedAction implements EventHandler<MouseEvent> {
 							case 4: // Knight:
 								x_movement = Math.abs(releasedX - u.getX()); // end - start
 								y_movement = Math.abs(releasedY - u.getY()); // end - start
-								//Essentially we are just checking if the piece goes one direction
-								//2 spots and 1 direction another, then we are okay
-								if((x_movement == 1 && y_movement == 2) || (x_movement == 2 && y_movement == 1)) {
+								// Essentially we are just checking if the piece goes one direction
+								// 2 spots and 1 direction another, then we are okay
+								if ((x_movement == 1 && y_movement == 2) || (x_movement == 2 && y_movement == 1)) {
 									// Valid, check to if unit at path is ally or opponent
 									System.out.println("Else");
 									unitAtPath = unitExistsAtCoords(releasedX, releasedY, checkerboardPane);
-									if(unitAtPath != null) {
-										if(unitAtPath.getColor() == u.getColor()) { // If unit at path is the player's own unit
+									if (unitAtPath != null) {
+										if (unitAtPath.getColor() == u.getColor()) { // If unit at path is the player's
+																						// own unit
 											System.out.println("Unit get color");
 											validMove = false;
 										}
 									}
-								}
-								else {
+								} else {
 									validMove = false;
 								}
-								
+
 								break;
 							case 5: // Queen: Combo of Rook + Bishop
 								x_movement = releasedX - u.getX();
