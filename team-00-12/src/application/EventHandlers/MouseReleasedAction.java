@@ -7,7 +7,6 @@ import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 
 
 // Used for unit movement (moving the selected unit to a tile)

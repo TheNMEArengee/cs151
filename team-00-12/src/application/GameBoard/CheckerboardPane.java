@@ -1,12 +1,8 @@
 package application.GameBoard;
 
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.Random;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Set;
 
 import application.Unit;
@@ -25,7 +21,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.scene.input.MouseEvent;
 
 //Checkerboard field's controller basically
 public class CheckerboardPane extends Pane {
@@ -332,12 +327,16 @@ public class CheckerboardPane extends Pane {
 		tileGroup.getChildren().add(description);
 	}
 
-	/* Get methods */
+	/* Get and set methods */
 	public Checkerboard getCheckerBoard() {
 		return this.checkerboard;
 	}
 
 	public Set<Unit> getUnits() {
 		return units;
+	}
+	
+	public GraphicsContext getGraphicsContext() {
+		return gc;
 	}
 }

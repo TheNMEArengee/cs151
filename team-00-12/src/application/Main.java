@@ -84,17 +84,6 @@ public class Main extends Application {
 
 			// Event for start button. Sends the user to the game
 			startBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-				/* Old code */
-//				VBox battleField = constructVBox();
-//				battleField.getChildren().addAll(CreateBoard.createBoard(), backBtn);
-//				BorderPane gameRoot = new BorderPane();
-
-//				gameRoot.setCenter(battleField);
-
-//				Scene battleInit = new Scene(gameRoot, 600, 650);
-//				primaryStage.setScene(battleInit);
-
-				/* Current Code */
 				primaryStage.close();
 				VBox battleField = constructVBox();
 				Checkerboard checkerboard = Checkerboard.getInstance();
@@ -139,7 +128,9 @@ public class Main extends Application {
 			// Event handler for tutorial back button. Sends the user back to the title
 			// screen
 			backBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
+				primaryStage.close();
 				primaryStage.setScene(welcomeScene);
+				primaryStage.show();
 			});
 
 			// Event handler for back button on title screen. Exits the application
