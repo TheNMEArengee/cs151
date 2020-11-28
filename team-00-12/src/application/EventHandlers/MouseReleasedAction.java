@@ -186,6 +186,44 @@ public class MouseReleasedAction implements EventHandler<MouseEvent> {
 								}
 								break;
 							case 4: // Knight:
+								//Up 2 + (Right, left)
+								//Down 2 + (right left)
+								//Right 2 + (top, down)
+								//Left 2 + (top, down)
+								x_movement = Math.abs(releasedX - u.getX()); // end - start
+								y_movement = Math.abs(releasedY - u.getY()); // end - start
+								//Essentially we are just checking if the piece goes one direction
+								//2 spots and 1 direction another, then we are okay
+								System.out.println("Knight: "+ releasedX + ", " + releasedY);
+								System.out.println("Knight x, y: "+ x_movement + ", " + y_movement);
+//								if(x_movement == 2 && y_movement == 1) { // Valid knight move
+//								}
+//								else if(x_movement == 1 && y_movement == 2) { //Also valid knight move
+//								}
+//								else { //Invalid
+//									validMove = false;
+//								}
+								if(x_movement == 1 && y_movement == 2) {
+									System.out.println("What");
+								}
+								
+								if((x_movement != 1 && y_movement != 2)) { // Invalid
+									System.out.println("Not 1 not 2");
+									validMove = false;
+								}
+								else if(x_movement != 2 && y_movement != 1) {
+									System.out.println("Not 1 not 2");
+									validMove = false;
+								}
+								else { // Valid, check to if unit at path is ally or opponent
+									System.out.println("Else");
+									unitAtPath = unitExistsAtCoords(releasedX, releasedY, checkerboardPane);
+									if(unitAtPath.getColor() == u.getColor()) { // If unit at path is the player's own unit
+										System.out.println("Unit get color");
+										validMove = false;
+									}
+								}
+								
 								break;
 							case 5: // Queen: Move anything
 							}
