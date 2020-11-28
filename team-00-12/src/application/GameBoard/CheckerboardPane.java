@@ -15,6 +15,9 @@ import application.CardContainers.Hand;
 import application.Affiliation;
 import application.Card;
 import javafx.scene.Group;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -31,6 +34,8 @@ public class CheckerboardPane extends Pane {
 	private Checkerboard checkerboard; 		// Checkerboard instance
 	private GridPane checkerboardGridPane; 	// Grid to place the checkerboard
 	private Group tileGroup; 				// For checkerboard tiles
+	private Canvas canvas;
+	private GraphicsContext gc;
 
 
 	// Constructor for CheckerboardPane
@@ -46,6 +51,8 @@ public class CheckerboardPane extends Pane {
 		this.deck = new Deck();
 		setUnits();
 		setCards();
+		 canvas = new Canvas(800,450);
+	     gc = canvas.getGraphicsContext2D();
 		draw();
 	}
 
@@ -88,16 +95,12 @@ public class CheckerboardPane extends Pane {
 
 
 		// Cards in player 0 hand
-		int player = 0;
-
 		for(int numOfCards = 0; numOfCards < 5; numOfCards++) {
-
 			hand0.add(new Card(Affiliation.WHITE, rand.nextInt(5)));
 		}
 
 
 		//Cards in player 1 hand
-		player = 1;
 		for(int numOfCards = 0; numOfCards < 5; numOfCards++) {
 			hand1.add(new Card(Affiliation.BLACK, rand.nextInt(5)));
 		}
@@ -121,6 +124,7 @@ public class CheckerboardPane extends Pane {
 		drawUnits();
 		drawCards();
 		getChildren().add(checkerboardGridPane);
+		getChildren().add(canvas);
 	}
 
 	// Draw the checkerboard
@@ -216,8 +220,13 @@ public class CheckerboardPane extends Pane {
 			
 			
 			//Generating card text for player 0 cards
-			Text t = new Text(x + 13, y + 60, c.getMovementTypeID() + "");
+			Text t = new Text(x + 10, y + 20, c.getTitle() + "");
 			tileGroup.getChildren().add(t);
+			
+			
+			//Generating images for player 1 cards
+			Image i = c.getImage();
+			gc.drawImage(i, x + 5, y + 30);
 		}
 
 
@@ -242,19 +251,37 @@ public class CheckerboardPane extends Pane {
 			
 			
 			//Generating card text for player 1 cards
-			Text t = new Text(x + 13, y + 60, c.getMovementTypeID() + "");
+			Text t = new Text(x + 10, y + 20, c.getTitle() + "");
 			tileGroup.getChildren().add(t);
+			
+			
+			//Generating images for player 1 cards
+			Image i = c.getImage();
+			gc.drawImage(i, x + 5, y + 30);
 		}
 
-		//Draw the deck
+		/*
+		 * Draw the deck
+		 */
+		
+		
+		//Deck rectangle
 		Rectangle deck = new Rectangle(10 + (tileSize * 8), 10 + (tileSize * 3), cardSizeX, cardSizeY);
 		deck.setFill(Color.AQUA);
 		deck.setStroke(Color.BLACK);
 		deck.setArcWidth(20);
 		deck.setArcHeight(20);
 		tileGroup.getChildren().add(deck);
-		Text deckText = new Text(10 + (tileSize * 8) + 13, 10 + (tileSize * 3) + 60, "Deck");
+		
+		
+		//Deck text
+		Text deckText = new Text(10 + (tileSize * 8) + 10, 10 + (tileSize * 3) + 20, "Deck");
 		tileGroup.getChildren().add(deckText);
+		
+		
+		//Deck Image
+		Image i = new Image("img/pileofshitpawn.png", 50, 50, true, true);
+		gc.drawImage(i, 10 + (tileSize * 8) + 5, 10 + (tileSize * 3) + 30);
 	}
 
 	/* Get methods */
