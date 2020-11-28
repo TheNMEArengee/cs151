@@ -1,5 +1,8 @@
 package application;
 
+import java.util.ArrayList;
+
+import application.CardContainers.Effect;
 import javafx.scene.image.Image;
 
 public class Card {
@@ -8,7 +11,7 @@ public class Card {
 	private int movementTypeID;
 	private String title;
 	private String description;
-	private Image image; 
+	private Image image;
 	
 	
 		// Constructor
@@ -16,6 +19,10 @@ public class Card {
 			this.affiliation = affiliation;
 			selected = false;
 			this.movementTypeID = movementTypeID;
+			ArrayList<String> effects = Effect.getEffect(movementTypeID);
+			this.title = effects.get(0);
+			this.description = effects.get(1);
+			this.image = new Image(effects.get(2), 50, 50, true, true);
 		}
 	
 		

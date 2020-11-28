@@ -57,5 +57,7 @@ public class Hand {
 	public Affiliation getAffiliation() {
 		return affiliation;
 	}
-
+	
+	
+	
 }
