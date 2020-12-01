@@ -1,40 +1,23 @@
 package application;
 
 import javafx.scene.paint.Color;
-
-import java.io.IOException;
-
-
+import application.EventHandlers.MouseMoved;
 import application.EventHandlers.MousePressedAction;
 import application.EventHandlers.MouseReleasedAction;
 import application.GameBoard.Checkerboard;
 import application.GameBoard.CheckerboardPane;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.scene.Group;
-import javafx.scene.layout.GridPane;
-import javafx.scene.Parent;
-import javafx.geometry.Pos;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.StrokeType;
-import javafx.scene.transform.Translate;
-import javafx.scene.paint.Paint;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.StrokeType;
-import javafx.scene.Node;
+
 
 public class Main extends Application {
 	// Used for MasterCard #ad circle movements
@@ -92,6 +75,7 @@ public class Main extends Application {
 				battleField.getChildren().addAll(checkerboardPane, backBtn);
 				checkerboardPane.setOnMousePressed(new MousePressedAction(checkerboardPane));
 				checkerboardPane.setOnMouseReleased(new MouseReleasedAction(checkerboardPane, primaryStage, welcomeScene));
+				checkerboardPane.setOnMouseMoved(new MouseMoved(checkerboardPane));
 				BorderPane bp = new BorderPane();
 				bp.setCenter(battleField);
 				Scene battleFieldInit = new Scene(bp, 800, 650);
