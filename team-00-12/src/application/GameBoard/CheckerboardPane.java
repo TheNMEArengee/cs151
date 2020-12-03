@@ -33,6 +33,7 @@ public class CheckerboardPane extends Pane {
 	private Group tileGroup; // For checkerboard tiles
 	private Canvas canvas;
 	private GraphicsContext gc;
+	private int kingPawn = 5; //TESTER
 
 	// Constructor for CheckerboardPane
 	public CheckerboardPane(Checkerboard checkerboard) {
@@ -59,7 +60,7 @@ public class CheckerboardPane extends Pane {
 		for (int y = 0; y < 2; y++) {
 			for (int x = 0; x < 8; x++) {
 				if (x == 4 && y == 0) { // Add king
-					units.add(new Unit(x, y, player, 5));
+					units.add(new Unit(x, y, player, kingPawn));
 				}
 				else { //Add pawn
 					units.add(new Unit(x, y, player, 0));
@@ -72,7 +73,7 @@ public class CheckerboardPane extends Pane {
 		for (int y = 6; y < 8; y++) {
 			for (int x = 0; x < 8; x++) {
 				if (x == 4 && y == 7) { // Add king
-					units.add(new Unit(x, y, player, 5));
+					units.add(new Unit(x, y, player, kingPawn));
 				}
 				else { //Add pawn
 					units.add(new Unit(x, y, player, 0));
@@ -161,14 +162,14 @@ public class CheckerboardPane extends Pane {
 
 			// Determine color of pieces, check which player the unit belongs to
 			if (u.getPlayer() == 0) {
-				if (u.getRole() == 5) { // King
+				if (u.getRole() == kingPawn) { // King
 					r.setFill(Color.rgb(235, 0, 27));
 				} else { // Pawn
 					r.setFill(Color.WHITE);
 				}
 				r.setStroke(Color.BLACK);
 			} else {
-				if (u.getRole() == 5) { // King
+				if (u.getRole() == kingPawn) { // King
 					r.setFill(Color.rgb(247, 158, 27));
 				} else { // Pawn
 					r.setFill(Color.GREY);
