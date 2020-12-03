@@ -7,18 +7,22 @@ import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
+import javafx.scene.canvas.GraphicsContext;
 
 // Used for unit movement (moving the selected unit to a tile)
 public class MouseReleasedAction implements EventHandler<MouseEvent> {
 	private CheckerboardPane checkerboardPane;
 	private Stage primaryStage;
 	private Scene welcomeScene;
+	private GraphicsContext gc;
+	
 
 	// Constructor
 	public MouseReleasedAction(CheckerboardPane checkerboardPane, Stage primaryStage, Scene welcomeScene) {
 		this.checkerboardPane = checkerboardPane;
 		this.primaryStage = primaryStage;
 		this.welcomeScene = welcomeScene;
+		 this.gc = checkerboardPane.getGraphicsContext();
 	}
 
 	// Main Handler
@@ -116,6 +120,7 @@ public class MouseReleasedAction implements EventHandler<MouseEvent> {
 			}
 		}
 		checkerboardPane.getUnits().remove(unitToRemove);
+		gc.clearRect(0, 0, 480, 480);
 		checkerboardPane.drawUnits();
 	}
 
@@ -387,33 +392,5 @@ public class MouseReleasedAction implements EventHandler<MouseEvent> {
 			return false;
 		}
 		return true;
-	}
-
-	/* Not used */
-	public void eatPiece(int x, int y, char side) {
-//        chessPane.getChessPieces().removeIf(e->{
-//            if(e.getCol()==x&&e.getRow()==y&&e.getSide()!=side){
-//                stack.push(e);
-//                return true;
-//            }
-//            return false;
-//        });
-	}
-
-	public boolean judgeGame(int x, int y) {
-//        for(ChessPiece e:chessPane.getChessPieces()){
-//            if(e.getCol()==x&&e.getRow()==y&&(
-//                    e.getType()== PieceType.KINGBLACK||e.getType()== PieceType.KINGWHITE))
-//                return true;
-//        }
-
-		return false;
-	}
-
-	public void printTip(char side) {
-//        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-//        alert.setContentText((side=='B'?"é»‘":"ç™½")+"æ–¹å�–å¾—èƒœåˆ©");
-//        alert.setTitle("æ¸¸æˆ�ç»“æ�Ÿ");
-//        alert.showAndWait();
 	}
 }

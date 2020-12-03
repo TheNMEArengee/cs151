@@ -136,6 +136,8 @@ public class CheckerboardPane extends Pane {
 					r.setFill(Color.rgb(125, 135, 150));
 				}
 
+				
+				r.toFront();
 				tileGroup.getChildren().add(r);
 			}
 		}
