@@ -182,11 +182,19 @@ public class CheckerboardPane extends Pane {
 
 	// Draw the cards using the "cards" set that was initialized in setCards()
 	public void drawCards() {
+		drawPlayer0Hand();
+		drawPlayer1Hand();
+		drawDeck();
+	}
+
+	//Draws player 0 hand
+	public void drawPlayer0Hand() {
+		// Draw player 0 hand
 		int tileSize = checkerboard.getTileSize();
 		int cardSizeX = checkerboard.getCardSizeX();
 		int cardSizeY = checkerboard.getCardSizeY();
 
-		// Draw player 0 hand
+
 		for (Card c : player0Hand.getHand()) {
 			int handPosition = player0Hand.getHand().indexOf(c);
 			int x = 10 + (tileSize * 8) + (handPosition * cardSizeX);
@@ -211,8 +219,15 @@ public class CheckerboardPane extends Pane {
 			Image i = c.getImage();
 			gc.drawImage(i, x + 5, y + 30);
 		}
+	}
 
-		// Draw player 1 hand
+	//Draws player 1 hand
+	public void drawPlayer1Hand() {
+		int tileSize = checkerboard.getTileSize();
+		int cardSizeX = checkerboard.getCardSizeX();
+		int cardSizeY = checkerboard.getCardSizeY();
+
+
 		for (Card c : player1Hand.getHand()) {
 			int handPosition = player1Hand.getHand().indexOf(c);
 			int x = 10 + (tileSize * 8) + (handPosition * cardSizeX);
@@ -235,10 +250,15 @@ public class CheckerboardPane extends Pane {
 			Image i = c.getImage();
 			gc.drawImage(i, x + 5, y + 30);
 		}
+	}
 
-		/*
-		 * Draw the deck
-		 */
+	//Draws the deck
+	public void drawDeck() {
+		int tileSize = checkerboard.getTileSize();
+		int cardSizeX = checkerboard.getCardSizeX();
+		int cardSizeY = checkerboard.getCardSizeY();
+
+
 		//Deck rectangle
 		Rectangle deck = new Rectangle(10 + (tileSize * 8), 10 + (tileSize * 3), cardSizeX, cardSizeY);
 		deck.setFill(Color.AQUA);
@@ -254,41 +274,6 @@ public class CheckerboardPane extends Pane {
 		//Deck Image
 		Image i = new Image("img/pileofshitpawn.png", 50, 50, true, true);
 		gc.drawImage(i, 10 + (tileSize * 8) + 5, 10 + (tileSize * 3) + 30);
-
-
-		/*
-		 * Test Code for drawEnlargedCard()
-		 * This is identical to the code in the method, except the card details is set to specifically King
-		 */
-		//		ArrayList<String> cardDetails = Effect.getEffect(4);
-		//		Rectangle r = new Rectangle(10 + (checkerboard.getTileSize() * 8) + (3 * checkerboard.getCardSizeX()), 135, checkerboard.getCardSizeX() * 2, checkerboard.getCardSizeY() * 2 - 10);
-		//
-		//
-		//		// Determine color of pieces, check which player the unit belongs to
-		//		r.setFill(Color.WHITE);
-		//		r.setStroke(Color.BLACK);
-		//		// Rounded edges for units
-		//		r.setArcWidth(20);
-		//		r.setArcHeight(20);
-		//		tileGroup.getChildren().add(r);
-		//
-		//
-		//		//Title text
-		//		Text title = new Text(10 + (checkerboard.getTileSize() * 8) + (3 * checkerboard.getCardSizeX()) + 20, 175, cardDetails.get(0));
-		//		title.setUnderline(true);
-		//		title.setFont(new Font("Happy Monkey", 30));
-		//		tileGroup.getChildren().add(title);
-		//
-		//
-		//		//Image
-		//		Image image = new Image(cardDetails.get(2), 100, 100, true, true);
-		//		gc.drawImage(image, 10 + (checkerboard.getTileSize() * 8) + (3 * checkerboard.getCardSizeX()) + 10, 182);
-		//
-		//
-		//		//Description text
-		//		Text description = new Text((checkerboard.getTileSize() * 8) + (3 * checkerboard.getCardSizeX()) + 20, 300, cardDetails.get(1));
-		//		description.setWrappingWidth(100);
-		//		tileGroup.getChildren().add(description);
 	}
 
 	//Draws the card that is hovered over by the mouse
@@ -332,7 +317,7 @@ public class CheckerboardPane extends Pane {
 		description.setWrappingWidth(100);
 		tileGroup.getChildren().add(description);
 	}
-	
+
 	//Gets the card at the given x, y position
 	public Card getCardAt(int x, int y) {
 		Card c = null;
@@ -344,7 +329,7 @@ public class CheckerboardPane extends Pane {
 		int blackCardRegionTop = 10 + (tileSize * 6);;
 		int blackCardRegionBottom = blackCardRegionTop + checkerboard.getCardSizeY();
 
-		
+
 		//If the x area is within the card area
 		if(x >= leftMostCardRegion && x < rightMostCardRegion) {
 			//If the y coordinate is in the white card region, retrieve and return the card at that position
@@ -358,23 +343,23 @@ public class CheckerboardPane extends Pane {
 				c = player1Hand.getHand().get(cardIndex);
 			}
 		}
-		
-		
+
+
 		//Return null if no card is found
 		return c;
 	}
-
-
 
 	/* Get and set methods */
 	public Checkerboard getCheckerBoard() {
 		return this.checkerboard;
 	}
 
+	//Returns the set of units
 	public Set<Unit> getUnits() {
 		return units;
 	}
 
+	//Returns the graphics context
 	public GraphicsContext getGraphicsContext() {
 		return gc;
 	}

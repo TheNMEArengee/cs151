@@ -383,5 +383,4 @@ public class MouseReleasedAction implements EventHandler<MouseEvent> {
 //        alert.setTitle("æ¸¸æˆ�ç»“æ�Ÿ");
 //        alert.showAndWait();
 	}
-
 }
