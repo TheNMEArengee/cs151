@@ -29,12 +29,9 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			//			System.out.println("Chess Fight by Jason Huynh, Eric Nguyen, and Justin Zhu");
+			System.out.println("Chess Fight by Jason Huynh, Eric Nguyen, and Justin Zhu");						
 			
-			//Home scene creation
-			primaryStage.setTitle("Chess Fight");
 			
-
 			//Creating home screen containers
 			VBox vbox = constructVBox();
 			vbox.setPadding(new Insets(10, 10, 10, 10));
@@ -60,7 +57,7 @@ public class Main extends Application {
 			root.getChildren().addAll(redCircle, goldCircle);
 
 
-
+			primaryStage.setTitle("Chess Fight");
 			primaryStage.show();
 		} 
 		catch (Exception e) {
@@ -201,6 +198,7 @@ public class Main extends Application {
 	
 
 
+	//Runs the program
 	public static void main(String[] args) {
 		launch(args);
 	}
