@@ -58,4 +58,12 @@ public class Card {
 		public Image getImage() {
 			return this.image;
 		}
+
+
+		@Override
+		public String toString() {
+			return "Card [title=" + title + "]";
+		}
+		
+		
 }

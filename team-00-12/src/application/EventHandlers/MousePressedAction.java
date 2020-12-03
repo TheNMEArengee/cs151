@@ -1,6 +1,7 @@
 package application.EventHandlers;
 
 import application.Unit;
+import application.CardContainers.Deck;
 import application.GameBoard.Checkerboard;
 import application.GameBoard.CheckerboardPane;
 import javafx.event.EventHandler;
@@ -24,7 +25,7 @@ public class MousePressedAction implements EventHandler<MouseEvent> {
 	
 	// Main handler
 	@Override
-	public void handle(MouseEvent e) {
+	public void handle(MouseEvent e) {	
 		Checkerboard checkerboard = checkerboardPane.getCheckerBoard();
 		int tileSize = checkerboard.getTileSize();
 
@@ -97,6 +98,7 @@ public class MousePressedAction implements EventHandler<MouseEvent> {
 					}			
 				}
 				
+				
 				//Un-highlight immediate area
 				for(int i = unit.getX() - 1; i <= unit.getX() + 1; i++) {
 					for(int j = unit.getY() - 1; j <= unit.getY() + 1; j++) {
@@ -105,6 +107,8 @@ public class MousePressedAction implements EventHandler<MouseEvent> {
 						}
 					}
 				}
+				
+				
 				//Re-fill current square
 				gc.setFill(Color.rgb(235, 0, 27));
 				tiledFillRect(unit.getX() * 60, unit.getY() * 60);
@@ -121,8 +125,7 @@ public class MousePressedAction implements EventHandler<MouseEvent> {
 				//Un-highlight N/S/E/W
 				if((x == unit.getX() || y == unit.getY()) && x >= 0 && x <= 7 && y >= 0 & y <= 7) {
 					gc.clearRect(x * 60, y  * 60, 60, 60);
-				}
-			
+				}		
 			}
 		}
 	}
