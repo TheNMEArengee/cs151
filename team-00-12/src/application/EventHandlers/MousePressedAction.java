@@ -85,39 +85,44 @@ public class MousePressedAction implements EventHandler<MouseEvent> {
 
 	//Highlights all the valid squares a Knight can move
 	private void colorKnightSquares(Unit unit) {
-		//For the immediate area around it
+		//For the 2x2 area around it
 		for(int x = unit.getX() - 2; x <= unit.getX() + 2; x++) {
 			for(int y = unit.getY() - 2; y <= unit.getY() + 2; y++) {
-				Unit otherUnit = getUnitAt(x, y);
-				if(otherUnit == null || areOpposingUnits(unit, otherUnit)) {
-					tiledFillRect(x, y);
+				//If the square is in bounds
+				if(x >= 0 && x <= 7 && y >= 0 & y <= 7) {
+					Unit otherUnit = getUnitAt(x, y);
+					//If the square is null or an enemy piece is present, fill it
+					if(otherUnit == null || areOpposingUnits(unit, otherUnit)) {
+						tiledFillRect(x, y);
+					}			
 				}
-
-
+				
 				//Un-highlight immediate area
 				for(int i = unit.getX() - 1; i <= unit.getX() + 1; i++) {
 					for(int j = unit.getY() - 1; j <= unit.getY() + 1; j++) {
-						otherUnit = getUnitAt(i, j);
-						//If there is no unit or an enemy unit, color the square
-						if(otherUnit == null || areOpposingUnits(unit, otherUnit)) {
+						if(i >= 0 && i <= 7 && j >= 0 & j <= 7) {
 							gc.clearRect(i * 60, j  * 60, 60, 60);
 						}
 					}
 				}
+				//Re-fill current square
 				gc.setFill(Color.rgb(235, 0, 27));
 				tiledFillRect(unit.getX() * 60, unit.getY() * 60);
 				
 
 				//Un-highlight corners
-				if(Math.abs(unit.getX() - x)  > 1 && Math.abs(unit.getY() - y)  > 1) {
+				int cornerX = Math.abs(unit.getX() - x);
+				int cornerY = Math.abs(unit.getY() - y);
+				if(cornerX > 1 && cornerY > 1 && cornerX >= 0 && x >= 0 && x <= 7 && y >= 0 & y <= 7) {
 					gc.clearRect(x * 60, y  * 60, 60, 60);
 				}
 
 
 				//Un-highlight N/S/E/W
-				if(x == unit.getX() || y == unit.getY()) {
+				if((x == unit.getX() || y == unit.getY()) && x >= 0 && x <= 7 && y >= 0 & y <= 7) {
 					gc.clearRect(x * 60, y  * 60, 60, 60);
 				}
+			
 			}
 		}
 	}
