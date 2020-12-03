@@ -9,7 +9,6 @@ import application.GameBoard.CheckerboardPane;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -24,6 +23,7 @@ public class Main extends Application {
 	// Used for MasterCard #ad circle movements
 	private double initX;
 	private double initY;
+	
 
 	// Method to open application
 	@Override
@@ -104,7 +104,8 @@ public class Main extends Application {
 			Checkerboard checkerboard = Checkerboard.getInstance();
 			checkerboard.setCurrentPlayer(0); // Ensure Player 0 starts every time 'Start' is pressed.
 			CheckerboardPane checkerboardPane = new CheckerboardPane(checkerboard);
-			battleField.getChildren().addAll(checkerboardPane, backBtn);
+			Label playerTurn = new Label("Current Player: " + checkerboard.getCurrPlayerToString());
+			battleField.getChildren().addAll(checkerboardPane, playerTurn, backBtn);
 			checkerboardPane.setOnMousePressed(new MousePressedAction(checkerboardPane));
 			checkerboardPane.setOnMouseReleased(new MouseReleasedAction(checkerboardPane, primaryStage, welcomeScene));
 			checkerboardPane.setOnMouseMoved(new MouseMoved(checkerboardPane));

@@ -4,11 +4,11 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.ArrayList;
 import java.util.Set;
-
 import application.Unit;
 import application.CardContainers.Deck;
 import application.CardContainers.Effect;
 import application.CardContainers.Hand;
+import javafx.scene.control.Label;
 import application.Affiliation;
 import application.Card;
 import javafx.scene.Group;
@@ -363,4 +363,10 @@ public class CheckerboardPane extends Pane {
 	public GraphicsContext getGraphicsContext() {
 		return gc;
 	}
+	
+	//
+	public void updateTurnPlayer(Label label) {
+		
+	}
+	
 }
