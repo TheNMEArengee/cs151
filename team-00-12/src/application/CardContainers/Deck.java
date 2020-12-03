@@ -1,14 +1,20 @@
-package application;
+package application.CardContainers;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.Queue;
+import application.Affiliation;
+import application.Card;
 
-public class Deck {
+
+public class Deck{
 	private Queue<Card> deck;
 
 
-	public Deck(Queue<Card> deck) {
-		this.deck = deck;
+	public Deck() {
+		
+		this.deck = new LinkedList<Card>();
 	}
 	
 	
@@ -38,4 +44,23 @@ public class Deck {
 		}
 		deck.addAll(addMe);
 	}
+	
+	
+	//Shuffle the deck
+	public void shuffle() {
+		Collections.shuffle((LinkedList<Card>) deck); 
+	}
+
+
+	@Override
+	public String toString() {
+		String s = "Deck [deck= \n";
+		for(Card c : deck) {
+			s += c.toString() + "\n";
+		}
+		s += "]";
+		return s;
+	}	
+	
+	
 }
