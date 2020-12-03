@@ -21,6 +21,12 @@ public class Hand {
 	public ArrayList<Card> getHand() {
 		return hand;
 	}
+	
+	public void resetSelectedCards() {
+		this.hand.forEach((c)->{
+			c.setSelected(false);
+		});
+	}
 
 
 	//Add a card to the hand

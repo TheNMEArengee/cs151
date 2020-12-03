@@ -33,7 +33,7 @@ public class CheckerboardPane extends Pane {
 	private Group tileGroup; // For checkerboard tiles
 	private Canvas canvas;
 	private GraphicsContext gc;
-	private int kingPawn = 4; //TESTER
+	private int kingPawn = 1;
 
 	// Constructor for CheckerboardPane
 	public CheckerboardPane(Checkerboard checkerboard) {
@@ -91,17 +91,17 @@ public class CheckerboardPane extends Pane {
 
 		// Cards in player 0 hand
 		for (int numOfCards = 0; numOfCards < 5; numOfCards++) {
-			hand0.add(new Card(Affiliation.WHITE, rand.nextInt(5)));
+			hand0.add(new Card(Affiliation.WHITE, rand.nextInt(4)+1));
 		}
 
 		// Cards in player 1 hand
 		for (int numOfCards = 0; numOfCards < 5; numOfCards++) {
-			hand1.add(new Card(Affiliation.BLACK, rand.nextInt(5)));
+			hand1.add(new Card(Affiliation.BLACK, rand.nextInt(4)+1));
 		}
 
 		// Cards in deck
 		for (int numOfCards = 0; numOfCards < 21; numOfCards++) {
-			deck.add(new Card(Affiliation.DECK, rand.nextInt(5)));
+			deck.add(new Card(Affiliation.DECK, rand.nextInt(4)+1));
 		}
 
 		player0Hand.addAll(hand0);
@@ -353,6 +353,18 @@ public class CheckerboardPane extends Pane {
 
 		//Return null if no card is found
 		return c;
+	}
+	
+	public Hand getPlayer0Hand() {
+		return this.player0Hand;
+	}
+	
+	public Hand getPlayer1Hand() {
+		return this.player1Hand;
+	}
+	
+	public Deck getDeck() {
+		return this.deck;
 	}
 
 	/* Get and set methods */

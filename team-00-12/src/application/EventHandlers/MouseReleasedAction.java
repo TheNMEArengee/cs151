@@ -1,6 +1,8 @@
 package application.EventHandlers;
 
+import application.Card;
 import application.Unit;
+import application.CardContainers.Hand;
 import application.GameBoard.Checkerboard;
 import application.GameBoard.CheckerboardPane;
 import javafx.event.EventHandler;
@@ -38,10 +40,33 @@ public class MouseReleasedAction implements EventHandler<MouseEvent> {
 
 		boolean validMove = true;
 		Unit unitToRemove = null;
-
+		
+		//Check what card is selected
+		Hand currentHand = null;
+		Card cardSelected = null;
+		//Save current player 0 or 1
+		//if 0 get 0's hand, else get 1's hand
+		if(checkerboard.getCurrPlayer() == 0) {
+			currentHand = checkerboardPane.getPlayer0Hand();
+		}
+		else if(checkerboard.getCurrPlayer() == 1) {
+			currentHand = checkerboardPane.getPlayer1Hand();
+		}
+		if(currentHand != null) {
+			for(Card c : currentHand.getHand()) {
+				if(c.isSelected()) {
+					cardSelected = c;
+					System.out.println("Clicked: " + c.getMovementTypeID());
+				}
+			}
+		}
+		int movement = setCardSelectedMovement(cardSelected);
+		System.out.println("movement: "+ movement);
+		
 		// Check all units to see which one is selected, then determine validity of
 		// movement with game logic
 		for (Unit u : checkerboardPane.getUnits()) {
+			int oldRole = u.getRole();
 			if (u.isSelected()) { // unit is selected
 				if (checkerboard.getCurrPlayer() == u.getPlayer()) { // unit moved belongs to current player
 					// If the player did not just click and release on the same tile
@@ -49,24 +74,30 @@ public class MouseReleasedAction implements EventHandler<MouseEvent> {
 						// Means they moved, set the unit's location to new coordinates
 						if (releasedX < 8 && releasedY < 8) { // If in bounds
 							Unit unitAtReleasedCoords = unitExistsAtCoords(releasedX, releasedY, checkerboardPane);
-							switch (u.getRole()) {
-							case 0: // Pawn: Move 1 forward
-								validMove = pawnLogic(u, unitAtReleasedCoords, releasedX, releasedY);
-								break;
-							case 1: // King: Move 1 anywhere
+//							switch (u.getRole()) {
+							if(u.getRole()== 0) {
+								switch(movement) {
+								case 0: // Pawn: Move 1 forward
+									validMove = pawnLogic(u, unitAtReleasedCoords, releasedX, releasedY);
+									break;
+								case 1: // King: Move 1 anywhere
+									validMove = kingLogic(u, releasedX, releasedY);
+									break;
+								case 2: // Rook: Move infinite X or infinite Y
+									validMove = rookLogic(u, releasedX, releasedY);
+									break;
+								case 3: // Bishop: Move infinite diagonal
+									validMove = bishopLogic(u, releasedX, releasedY);
+									break;
+								case 4: // Knight: Move in L shapes
+									validMove = knightLogic(u, releasedX, releasedY);
+									break;
+								case 5: // Queen: Combo of Rook + Bishop
+									validMove = queenLogic(u, releasedX, releasedY);
+								}
+							}
+							else if(u.getRole() == 1) {
 								validMove = kingLogic(u, releasedX, releasedY);
-								break;
-							case 2: // Rook: Move infinite X or infinite Y
-								validMove = rookLogic(u, releasedX, releasedY);
-								break;
-							case 3: // Bishop: Move infinite diagonal
-								validMove = bishopLogic(u, releasedX, releasedY);
-								break;
-							case 4: // Knight: Move in L shapes
-								validMove = knightLogic(u, releasedX, releasedY);
-								break;
-							case 5: // Queen: Combo of Rook + Bishop
-								validMove = queenLogic(u, releasedX, releasedY);
 							}
 
 							if (unitAtReleasedCoords != null) { // Check if unit exists at coords that unit wants to
@@ -98,6 +129,12 @@ public class MouseReleasedAction implements EventHandler<MouseEvent> {
 							validMove = false;
 						}
 						if (validMove) {
+							if(cardSelected != null) { // Used card, remove?
+								cardSelected.setSelected(false);
+								currentHand.removeCard(cardSelected);
+								currentHand.addCard(checkerboardPane.getDeck().drawCard());
+								checkerboardPane.drawCards();
+							}
 							u.setX(releasedX);
 							u.setY(releasedY);
 							System.out.println("Player " + checkerboard.getCurrPlayer() + " (" + u.getColor() + ")"
@@ -119,11 +156,19 @@ public class MouseReleasedAction implements EventHandler<MouseEvent> {
 						+ checkerboard.getCurrPlayerToString() + ")" + " turn.");
 			}
 		}
+		
 		checkerboardPane.getUnits().remove(unitToRemove);
 		gc.clearRect(0, 0, 480, 480);
 		checkerboardPane.drawUnits();
 	}
 
+	private int setCardSelectedMovement(Card c) {
+		if(c != null) {
+			return c.getMovementTypeID();
+		}
+		return 0; //default pawn
+	}
+	
 	public Unit unitExistsAtCoords(int x, int y, CheckerboardPane cp) {
 		Unit unitAtCoords = null;
 		for (Unit u : cp.getUnits()) {
