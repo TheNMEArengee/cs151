@@ -76,9 +76,6 @@ public class MousePressedAction implements EventHandler<MouseEvent> {
 						movement = 1;
 					}
 					Unit movingUnit = new Unit(unit.getX(), unit.getY(), unit.getPlayer(), movement);
-					//				System.out.println("-----------------------------------");
-					//				System.out.println("Selected Unit: " + unit.getX() + ", " + unit.getY() + ".");
-					//            	System.out.println("Pressed: " + pressedX + ", " + pressedY);
 					colorValidSquares(movingUnit);				
 					unit.setSelected(true);
 					checkerboardPane.drawUnits();

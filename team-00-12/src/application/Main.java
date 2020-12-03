@@ -104,8 +104,7 @@ public class Main extends Application {
 			Checkerboard checkerboard = Checkerboard.getInstance();
 			checkerboard.setCurrentPlayer(0); // Ensure Player 0 starts every time 'Start' is pressed.
 			CheckerboardPane checkerboardPane = new CheckerboardPane(checkerboard);
-			Label playerTurn = new Label("Current Player: " + checkerboard.getCurrPlayerToString());
-			battleField.getChildren().addAll(checkerboardPane, playerTurn, backBtn);
+			battleField.getChildren().addAll(checkerboardPane, backBtn);
 			checkerboardPane.setOnMousePressed(new MousePressedAction(checkerboardPane));
 			checkerboardPane.setOnMouseReleased(new MouseReleasedAction(checkerboardPane, primaryStage, welcomeScene));
 			checkerboardPane.setOnMouseMoved(new MouseMoved(checkerboardPane));

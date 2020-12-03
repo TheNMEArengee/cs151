@@ -33,6 +33,7 @@ public class CheckerboardPane extends Pane {
 	private Group tileGroup; // For checkerboard tiles
 	private Canvas canvas;
 	private GraphicsContext gc;
+	private Text t;
 	private int kingPawn = 1;
 
 	// Constructor for CheckerboardPane
@@ -40,6 +41,8 @@ public class CheckerboardPane extends Pane {
 		this.checkerboard = checkerboard;
 		this.checkerboardGridPane = new GridPane();
 		tileGroup = new Group();
+		t = new Text(10, 500, "Current Player : " + checkerboard.getCurrPlayerToString());
+		tileGroup.getChildren().add(t);
 		checkerboardGridPane.getChildren().add(tileGroup);
 		// checkerboardGridPane.getChildren().add(cardGroup);
 		this.units = new HashSet<>();
@@ -112,6 +115,7 @@ public class CheckerboardPane extends Pane {
 		drawBoard();
 		drawUnits();
 		drawCards();
+		drawCurrentPlayerLabel();
 		getChildren().add(checkerboardGridPane);
 		getChildren().add(canvas);
 	}
@@ -274,6 +278,12 @@ public class CheckerboardPane extends Pane {
 		// Deck Image
 		Image i = new Image("img/pileofshitpawn.png", 50, 50, true, true);
 		gc.drawImage(i, 10 + (tileSize * 8) + 5, 10 + (tileSize * 3) + 30);
+	}
+	
+	
+	//
+	public void drawCurrentPlayerLabel() {
+		t.setText("Current Player : " + checkerboard.getCurrPlayerToString());
 	}
 
 	// Draws the card that is hovered over by the mouse

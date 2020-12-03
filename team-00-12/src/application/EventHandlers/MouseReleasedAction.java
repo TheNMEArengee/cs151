@@ -56,12 +56,12 @@ public class MouseReleasedAction implements EventHandler<MouseEvent> {
 			for(Card c : currentHand.getHand()) {
 				if(c.isSelected()) {
 					cardSelected = c;
-					System.out.println("Clicked: " + c.getMovementTypeID());
+					System.out.println("Clicked " + c.toString());
 				}
 			}
 		}
 		int movement = setCardSelectedMovement(cardSelected);
-		System.out.println("movement: "+ movement);
+		System.out.println(cardSelected.getDescription());
 		
 		// Check all units to see which one is selected, then determine validity of
 		// movement with game logic
@@ -160,6 +160,7 @@ public class MouseReleasedAction implements EventHandler<MouseEvent> {
 		checkerboardPane.getUnits().remove(unitToRemove);
 		gc.clearRect(0, 0, 480, 480);
 		checkerboardPane.drawUnits();
+		checkerboardPane.drawCurrentPlayerLabel();
 	}
 
 	private int setCardSelectedMovement(Card c) {
