@@ -1,5 +1,6 @@
 package application.EventHandlers;
 
+import application.Card;
 import application.Unit;
 import application.CardContainers.Deck;
 import application.GameBoard.Checkerboard;
@@ -14,37 +15,88 @@ import javafx.scene.paint.Color;
 public class MousePressedAction implements EventHandler<MouseEvent> {
 	private CheckerboardPane checkerboardPane;
 	private GraphicsContext gc;
+	private Card currentSelectedMovement;
 
-	
 	// Constructor
 	public MousePressedAction(CheckerboardPane checkerboardPane) {
 		this.checkerboardPane = checkerboardPane;
 		this.gc = checkerboardPane.getGraphicsContext();
 	}
 
-	
+
 	// Main handler
 	@Override
 	public void handle(MouseEvent e) {	
 		Checkerboard checkerboard = checkerboardPane.getCheckerBoard();
 		int tileSize = checkerboard.getTileSize();
 
-		// Location of mouse press, translated to grid
+		// For the units, Location of mouse press, translated to grid 
 		int pressedX = (int) e.getX() / tileSize;
 		int pressedY = (int) e.getY() / tileSize;
 
-		// Traverse 'units' set in checkerboardPane to redraw/update units
-		checkerboardPane.getUnits().forEach(unit -> {
-			// If unit's coordinates match calculated mouse press coordinates
-			if (unit.getX() == pressedX && unit.getY() == pressedY) {
-				//				System.out.println("-----------------------------------");
-				//				System.out.println("Selected Unit: " + unit.getX() + ", " + unit.getY() + ".");
-				//            	System.out.println("Pressed: " + pressedX + ", " + pressedY);
-				colorValidSquares(unit);				
-				unit.setSelected(true);
-				checkerboardPane.drawUnits();
+		//For the cards
+		int mouseX = (int) e.getX();
+		int mouseY = (int) e.getY();
+
+		int currentPlayer = checkerboard.getCurrPlayer();
+		Card c = checkerboardPane.getCardAt(mouseX, mouseY);
+
+		if(currentPlayer == 0) {
+			for(Card car : checkerboardPane.getPlayer0Hand().getHand()) {
+				if(car.isSelected()) {
+					currentSelectedMovement = car;
+					break;
+				}
+				else {
+					currentSelectedMovement = null;
+				}
 			}
-		});
+		}
+		else if(currentPlayer == 1){
+			for(Card car : checkerboardPane.getPlayer1Hand().getHand()) {
+				if(car.isSelected()) {
+					currentSelectedMovement = car;
+					break;
+				}
+				else {
+					currentSelectedMovement = null;
+				}
+			}
+		}
+		if(c == null) { //Card is not selected
+			// Traverse 'units' set in checkerboardPane to redraw/update units
+			checkerboardPane.getUnits().forEach(unit -> {
+				// If unit's coordinates match calculated mouse press coordinates
+				if (unit.getX() == pressedX && unit.getY() == pressedY) {
+					int movement = 0;
+					if(currentSelectedMovement != null && unit.getRole() == 0) {
+						movement = currentSelectedMovement.getMovementTypeID();
+					}
+					else if(unit.getRole() == 1) {
+						movement = 1;
+					}
+					Unit movingUnit = new Unit(unit.getX(), unit.getY(), unit.getPlayer(), movement);
+					//				System.out.println("-----------------------------------");
+					//				System.out.println("Selected Unit: " + unit.getX() + ", " + unit.getY() + ".");
+					//            	System.out.println("Pressed: " + pressedX + ", " + pressedY);
+					colorValidSquares(movingUnit);				
+					unit.setSelected(true);
+					checkerboardPane.drawUnits();
+				}
+			});
+		}
+		else { //Card is selected
+			//if else used to reset selected, then set selected to that card
+			if(currentPlayer == 0) {
+				checkerboardPane.getPlayer0Hand().resetSelectedCards();
+			}
+			else if(currentPlayer == 1) {
+				checkerboardPane.getPlayer1Hand().resetSelectedCards();
+			}
+			c.setSelected(true);
+			//			System.out.println("Card selected: " + c.getMovementTypeID());
+		}
+
 	}
 
 
@@ -87,47 +139,47 @@ public class MousePressedAction implements EventHandler<MouseEvent> {
 	//Highlights all the valid squares a Knight can move
 	private void colorKnightSquares(Unit unit) {
 		//For the 2x2 area around it
-		for(int x = unit.getX() - 2; x <= unit.getX() + 2; x++) {
-			for(int y = unit.getY() - 2; y <= unit.getY() + 2; y++) {
-				//If the square is in bounds
-				if(x >= 0 && x <= 7 && y >= 0 & y <= 7) {
-					Unit otherUnit = getUnitAt(x, y);
-					//If the square is null or an enemy piece is present, fill it
-					if(otherUnit == null || areOpposingUnits(unit, otherUnit)) {
-						tiledFillRect(x, y);
-					}			
-				}
-				
-				
-				//Un-highlight immediate area
-				for(int i = unit.getX() - 1; i <= unit.getX() + 1; i++) {
-					for(int j = unit.getY() - 1; j <= unit.getY() + 1; j++) {
-						if(i >= 0 && i <= 7 && j >= 0 & j <= 7) {
-							gc.clearRect(i * 60, j  * 60, 60, 60);
-						}
-					}
-				}
-				
-				
-				//Re-fill current square
-				gc.setFill(Color.rgb(235, 0, 27));
-				tiledFillRect(unit.getX() * 60, unit.getY() * 60);
-				
-
-				//Un-highlight corners
-				int cornerX = Math.abs(unit.getX() - x);
-				int cornerY = Math.abs(unit.getY() - y);
-				if(cornerX > 1 && cornerY > 1 && cornerX >= 0 && x >= 0 && x <= 7 && y >= 0 & y <= 7) {
-					gc.clearRect(x * 60, y  * 60, 60, 60);
-				}
+        for(int x = unit.getX() - 2; x <= unit.getX() + 2; x++) {
+            for(int y = unit.getY() - 2; y <= unit.getY() + 2; y++) {
+                //If the square is in bounds
+                if(x >= 0 && x <= 7 && y >= 0 & y <= 7) {
+                    Unit otherUnit = getUnitAt(x, y);
+                    //If the square is null or an enemy piece is present, fill it
+                    if(otherUnit == null || areOpposingUnits(unit, otherUnit)) {
+                        tiledFillRect(x, y);
+                    }
+                }
 
 
-				//Un-highlight N/S/E/W
-				if((x == unit.getX() || y == unit.getY()) && x >= 0 && x <= 7 && y >= 0 & y <= 7) {
-					gc.clearRect(x * 60, y  * 60, 60, 60);
-				}		
-			}
-		}
+                //Un-highlight immediate area
+                for(int i = unit.getX() - 1; i <= unit.getX() + 1; i++) {
+                    for(int j = unit.getY() - 1; j <= unit.getY() + 1; j++) {
+                        if(i >= 0 && i <= 7 && j >= 0 & j <= 7) {
+                            gc.clearRect(i * 60, j  * 60, 60, 60);
+                        }
+                    }
+                }
+
+
+                //Re-fill current square
+                gc.setFill(Color.rgb(235, 0, 27));
+                tiledFillRect(unit.getX() * 60, unit.getY() * 60);
+
+
+                //Un-highlight corners
+                int cornerX = Math.abs(unit.getX() - x);
+                int cornerY = Math.abs(unit.getY() - y);
+                if(cornerX > 1 && cornerY > 1 && cornerX >= 0 && x >= 0 && x <= 7 && y >= 0 & y <= 7) {
+                    gc.clearRect(x * 60, y  * 60, 60, 60);
+                }
+
+
+                //Un-highlight N/S/E/W
+                if((x == unit.getX() || y == unit.getY()) && x >= 0 && x <= 7 && y >= 0 & y <= 7) {
+                    gc.clearRect(x * 60, y  * 60, 60, 60);
+                }
+            }
+        }
 	}
 
 
@@ -356,7 +408,7 @@ public class MousePressedAction implements EventHandler<MouseEvent> {
 		if(unit.getPlayer() == 1) {
 			sideMultiplier = -1;
 		}
-		
+
 
 		Unit otherUnit = getUnitAt(unit.getX(), unit.getY() + (1 * sideMultiplier));
 		//Checking straight ahead
@@ -401,12 +453,12 @@ public class MousePressedAction implements EventHandler<MouseEvent> {
 
 	//Color method for the colorValidSquares() method
 	public void tiledFillRect(int x, int y) {
-			// Alternate Colors
-			if ((x + y) % 2 == 0) {
-				gc.setFill(Color.DARKORANGE);
-			} else {
-				gc.setFill(Color.ORANGE);
-			}
-			gc.fillRect(x * 60, y * 60, 60, 60);
+		// Alternate Colors
+		if ((x + y) % 2 == 0) {
+			gc.setFill(Color.DARKORANGE);
+		} else {
+			gc.setFill(Color.ORANGE);
 		}
+		gc.fillRect(x * 60, y * 60, 60, 60);
+	}
 }

@@ -25,7 +25,6 @@ public class MouseMoved implements EventHandler<MouseEvent> {
 		//Get the card at the mouse's position
 		Card c = checkerboardPane.getCardAt(mouseX, mouseY);
 		
-		
 		//If the card exists, draw the enlarged version
 		if(c != null) {
 			checkerboardPane.drawEnlargedCard(c);
