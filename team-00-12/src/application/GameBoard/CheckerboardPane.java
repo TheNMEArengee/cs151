@@ -137,7 +137,6 @@ public class CheckerboardPane extends Pane {
 				}
 
 				
-				r.toFront();
 				tileGroup.getChildren().add(r);
 			}
 		}
