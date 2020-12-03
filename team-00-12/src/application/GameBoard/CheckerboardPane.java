@@ -33,7 +33,7 @@ public class CheckerboardPane extends Pane {
 	private Group tileGroup; // For checkerboard tiles
 	private Canvas canvas;
 	private GraphicsContext gc;
-	private int kingPawn = 5; //TESTER
+	private int kingPawn = 4; //TESTER
 
 	// Constructor for CheckerboardPane
 	public CheckerboardPane(Checkerboard checkerboard) {
@@ -136,7 +136,7 @@ public class CheckerboardPane extends Pane {
 					r.setFill(Color.rgb(125, 135, 150));
 				}
 
-				
+
 				tileGroup.getChildren().add(r);
 			}
 		}
@@ -158,22 +158,26 @@ public class CheckerboardPane extends Pane {
 			Rectangle r = new Rectangle(x, y, 40, 40);
 
 			// Rounded edges for units
-			r.setArcWidth(20);
-			r.setArcHeight(20);
+//			r.setArcWidth(20);
+//			r.setArcHeight(20);
 
 			// Determine color of pieces, check which player the unit belongs to
 			if (u.getPlayer() == 0) {
 				if (u.getRole() == kingPawn) { // King
-					r.setFill(Color.rgb(235, 0, 27));
+					Image i = new Image("img/KingWhite.jpg", 40, 40, true, true);
+					gc.drawImage(i, x, y, 40, 40);
 				} else { // Pawn
-					r.setFill(Color.WHITE);
+					Image i = new Image("img/SoldierWhite.jpg", 40, 40, true, true);
+					gc.drawImage(i, x, y, 40, 40);
 				}
 				r.setStroke(Color.BLACK);
 			} else {
 				if (u.getRole() == kingPawn) { // King
-					r.setFill(Color.rgb(247, 158, 27));
+					Image i = new Image("img/KingBlack.jpg", 40, 40, true, true);
+					gc.drawImage(i, x, y, 40, 40);
 				} else { // Pawn
-					r.setFill(Color.GREY);
+					Image i = new Image("img/SoldierBlack.jpg", 40, 40, true, true);
+					gc.drawImage(i, x, y, 40, 40);
 				}
 				r.setStroke(Color.BLACK);
 			}
@@ -365,10 +369,10 @@ public class CheckerboardPane extends Pane {
 	public GraphicsContext getGraphicsContext() {
 		return gc;
 	}
-	
+
 	//
 	public void updateTurnPlayer(Label label) {
-		
+
 	}
-	
+
 }
