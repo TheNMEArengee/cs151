@@ -294,79 +294,6 @@ public class CheckerboardPane extends Pane {
 		}
 	}
 
-	// Draws the card that is hovered over by the mouse
-	// For MouseMoved class
-	public void drawEnlargedCard(Card c) {
-		int ID = c.getMovementTypeID();
-		Affiliation affiliation = c.getAffiliation();
-		ArrayList<String> cardDetails = Effect.getEffect(ID);
-
-		// Rectangle
-		Rectangle r = new Rectangle(10 + (checkerboard.getTileSize() * 8) + (3 * checkerboard.getCardSizeX()), 135,
-				checkerboard.getCardSizeX() * 2, checkerboard.getCardSizeY() * 2 - 10);
-		if (affiliation == Affiliation.WHITE) {
-			r.setFill(Color.WHITE);
-		} else {
-			r.setFill(Color.GREY);
-		}
-		r.setStroke(Color.BLACK);
-
-		// Rounded edges for units
-		r.setArcWidth(20);
-		r.setArcHeight(20);
-		tileGroup.getChildren().add(r);
-
-		// Title text
-		Text title = new Text(10 + (checkerboard.getTileSize() * 8) + (3 * checkerboard.getCardSizeX()) + 20, 175,
-				cardDetails.get(0));
-		title.setUnderline(true);
-		title.setFont(new Font("Happy Monkey", 30));
-		tileGroup.getChildren().add(title);
-
-		// Image
-		Image image = new Image(cardDetails.get(2), 100, 100, true, true);
-		gc.drawImage(image, 10 + (checkerboard.getTileSize() * 8) + (3 * checkerboard.getCardSizeX()) + 10, 182);
-
-		// Description text
-		Text description = new Text((checkerboard.getTileSize() * 8) + (3 * checkerboard.getCardSizeX()) + 20, 300,
-				cardDetails.get(1));
-		description.setWrappingWidth(100);
-
-		tileGroup.getChildren().add(description);
-	}
-
-	// Gets the card at the given x, y position
-	// For MouseMoved class
-	public Card getCardAt(int x, int y) {
-		Card c = null;
-		int tileSize = checkerboard.getTileSize();
-		int leftMostCardRegion = (tileSize * 8) + 10;
-		int rightMostCardRegion = leftMostCardRegion + (checkerboard.getCardSizeX() * 5);
-		int whiteCardRegionTop = 10;
-		int whiteCardRegionBottom = whiteCardRegionTop + checkerboard.getCardSizeY();
-		int blackCardRegionTop = 10 + (tileSize * 6);
-		int blackCardRegionBottom = blackCardRegionTop + checkerboard.getCardSizeY();
-
-		// If the x area is within the card area
-		if (x >= leftMostCardRegion && x < rightMostCardRegion) {
-			// If the y coordinate is in the white card region, retrieve and return the card
-			// at that position
-			if (y >= whiteCardRegionTop && y <= whiteCardRegionBottom) {
-				int cardIndex = (x - leftMostCardRegion) / checkerboard.getCardSizeX();
-				c = player0Hand.getHand().get(cardIndex);
-			}
-			// Else, if the y coordinate is in the black card region, retrieve and return
-			// the card at that position
-			else if (y >= blackCardRegionTop && y <= blackCardRegionBottom) {
-				int cardIndex = (x - leftMostCardRegion) / checkerboard.getCardSizeX();
-				c = player1Hand.getHand().get(cardIndex);
-			}
-		}
-
-		// Return null if no card is found
-		return c;
-	}
-
 	// Returns the checkerboard
 	public Checkerboard getCheckerBoard() {
 		return this.checkerboard;
@@ -395,5 +322,41 @@ public class CheckerboardPane extends Pane {
 	// Returns the set of units
 	public Set<Unit> getUnits() {
 		return units;
+	}
+
+	// Returns the tileGroup object
+	public Group getTileGroup() {
+		return tileGroup;
+	}
+
+	// Gets the card at the given x, y position
+	public Card getCardAt(int x, int y) {
+		Card c = null;
+		int tileSize = checkerboard.getTileSize();
+		int leftMostCardRegion = (tileSize * 8) + 10;
+		int rightMostCardRegion = leftMostCardRegion + (checkerboard.getCardSizeX() * 5);
+		int whiteCardRegionTop = 10;
+		int whiteCardRegionBottom = whiteCardRegionTop + checkerboard.getCardSizeY();
+		int blackCardRegionTop = 10 + (tileSize * 6);
+		int blackCardRegionBottom = blackCardRegionTop + checkerboard.getCardSizeY();
+
+		// If the x area is within the card area
+		if (x >= leftMostCardRegion && x < rightMostCardRegion) {
+			// If the y coordinate is in the white card region, retrieve and return the card
+			// at that position
+			if (y >= whiteCardRegionTop && y <= whiteCardRegionBottom) {
+				int cardIndex = (x - leftMostCardRegion) / checkerboard.getCardSizeX();
+				c = player0Hand.getHand().get(cardIndex);
+			}
+			// Else, if the y coordinate is in the black card region, retrieve and return
+			// the card at that position
+			else if (y >= blackCardRegionTop && y <= blackCardRegionBottom) {
+				int cardIndex = (x - leftMostCardRegion) / checkerboard.getCardSizeX();
+				c = player1Hand.getHand().get(cardIndex);
+			}
+		}
+
+		// Return null if no card is found
+		return c;
 	}
 }

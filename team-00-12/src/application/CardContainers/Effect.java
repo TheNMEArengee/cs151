@@ -7,6 +7,7 @@ public class Effect {
 	public static ArrayList<String> getEffect(int ID) {
 		ArrayList<String> effects = new ArrayList<String>();
 
+		
 		if (ID == 1) {
 			effects.add("King");
 			effects.add("Gain King movement for 1 turn");
