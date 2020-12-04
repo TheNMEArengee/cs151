@@ -37,25 +37,33 @@ public class CheckerboardPane extends Pane {
 
 	// Constructor for CheckerboardPane
 	public CheckerboardPane(Checkerboard checkerboard) {
-		this.checkerboard = checkerboard;
-		this.checkerboardGridPane = new GridPane();
-		tileGroup = new Group();
-		currPlayer = new Text(10, 500, "Current Player : " + checkerboard.getCurrPlayerToString());
-		currMove = new Text(10, 525, "Current Move : Pawn");
-		tileGroup.getChildren().addAll(currPlayer, currMove);
-		checkerboardGridPane.getChildren().add(tileGroup);
-		// checkerboardGridPane.getChildren().add(cardGroup);
+		// Initializing everything
 		this.units = new HashSet<>();
 		this.player0Hand = new Hand(Affiliation.WHITE);
 		this.player1Hand = new Hand(Affiliation.BLACK);
 		this.deck = new Deck();
-		setUnits();
-		setCards();
-		canvas = new Canvas(800, 480);
-		gc = canvas.getGraphicsContext2D();
-		draw();
+		this.checkerboard = checkerboard;
+		this.checkerboardGridPane = new GridPane();
+		this.tileGroup = new Group();
+		this.canvas = new Canvas(800, 480);
+		this.gc = canvas.getGraphicsContext2D();
+		this.currPlayer = new Text(10, 500, "Current Player : " + checkerboard.getCurrPlayerToString());
+		this.currMove = new Text(10, 525, "Current Move : Pawn");
+		
+		
+		// Set and draw everything
+		tileGroup.getChildren().addAll(currPlayer, currMove);
+		checkerboardGridPane.getChildren().add(tileGroup);
+		setElements();
+		drawElements();
 	}
 
+	// Used in ctor to set everything
+	public void setElements() {
+		setUnits();
+		setCards();
+	}
+	
 	// Place the player units onto board (init/reset)
 	public void setUnits() {
 		// Units for player 0
@@ -110,7 +118,7 @@ public class CheckerboardPane extends Pane {
 	}
 
 	// Used in ctor to draw and show everything
-	public void draw() {
+	public void drawElements() {
 		drawBoard();
 		drawUnits();
 		drawCards();

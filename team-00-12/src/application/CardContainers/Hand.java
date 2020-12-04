@@ -21,12 +21,6 @@ public class Hand {
 		return hand;
 	}
 
-	public void resetSelectedCards() {
-		this.hand.forEach((c) -> {
-			c.setSelected(false);
-		});
-	}
-
 	// Add a card to the hand
 	public void addCard(Card c) {
 		if (hand.size() < handSize) {
@@ -57,5 +51,12 @@ public class Hand {
 	// Return hand affiliation
 	public Affiliation getAffiliation() {
 		return affiliation;
+	}
+
+	// Sets the selected state of all the cards in the hand to null
+	public void resetSelectedCards() {
+		this.hand.forEach((c) -> {
+			c.setSelected(false);
+		});
 	}
 }
