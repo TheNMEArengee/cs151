@@ -1,7 +1,6 @@
 package application.CardContainers;
 
 import java.util.ArrayList;
-
 import application.Affiliation;
 import application.Card;
 

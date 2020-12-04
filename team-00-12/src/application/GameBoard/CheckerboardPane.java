@@ -150,19 +150,11 @@ public class CheckerboardPane extends Pane {
 		int tileSize = checkerboard.getTileSize();
 		// Traverse entire "units" set
 		units.forEach(u -> {
-			// If we ever want to draw something to symbolize "Selected" visually
-			// if (u.isSelected()) {
-			// System.out.println("Selected: " + u.getX() + ", " + u.getY());
-			// }
-
 			// Rectangle(x coord, y coord, width, height)
 			int x = 10 + (u.getX() * tileSize);
 			int y = 10 + (u.getY() * tileSize);
 			Rectangle r = new Rectangle(x, y, 40, 40);
 
-			// Rounded edges for units
-			// r.setArcWidth(20);
-			// r.setArcHeight(20);
 
 			// Determine color of pieces, check which player the unit belongs to
 			if (u.getPlayer() == 0) {
@@ -282,11 +274,12 @@ public class CheckerboardPane extends Pane {
 		gc.drawImage(i, 10 + (tileSize * 8) + 5, 10 + (tileSize * 3) + 30);
 	}
 
-	//
+	// Draws the text on the screen that displays the current player
 	public void drawCurrentPlayerUI() {
 		currPlayer.setText("Current Player : " + checkerboard.getCurrPlayerToString());
 	}
 
+	// Draws the text on the screen that displays the current card selected
 	public void drawCurrentMoveUI() {
 		Hand currentHand = checkerboard.getCurrPlayer() == 0 ? getPlayer0Hand() : getPlayer1Hand();
 		boolean cardSelected = false;
@@ -302,6 +295,7 @@ public class CheckerboardPane extends Pane {
 	}
 
 	// Draws the card that is hovered over by the mouse
+	// For MouseMoved class
 	public void drawEnlargedCard(Card c) {
 		int ID = c.getMovementTypeID();
 		Affiliation affiliation = c.getAffiliation();
@@ -337,10 +331,12 @@ public class CheckerboardPane extends Pane {
 		Text description = new Text((checkerboard.getTileSize() * 8) + (3 * checkerboard.getCardSizeX()) + 20, 300,
 				cardDetails.get(1));
 		description.setWrappingWidth(100);
+
 		tileGroup.getChildren().add(description);
 	}
 
 	// Gets the card at the given x, y position
+	// For MouseMoved class
 	public Card getCardAt(int x, int y) {
 		Card c = null;
 		int tileSize = checkerboard.getTileSize();
@@ -371,26 +367,9 @@ public class CheckerboardPane extends Pane {
 		return c;
 	}
 
-	public Hand getPlayer0Hand() {
-		return this.player0Hand;
-	}
-
-	public Hand getPlayer1Hand() {
-		return this.player1Hand;
-	}
-
-	public Deck getDeck() {
-		return this.deck;
-	}
-
-	/* Get and set methods */
+	// Returns the checkerboard
 	public Checkerboard getCheckerBoard() {
 		return this.checkerboard;
-	}
-
-	// Returns the set of units
-	public Set<Unit> getUnits() {
-		return units;
 	}
 
 	// Returns the graphics context
@@ -398,9 +377,23 @@ public class CheckerboardPane extends Pane {
 		return gc;
 	}
 
-	//
-	public void updateTurnPlayer(Label label) {
-
+	// Returns player 0 (white) hand
+	public Hand getPlayer0Hand() {
+		return this.player0Hand;
 	}
 
+	// Returns player 1 (black) hand
+	public Hand getPlayer1Hand() {
+		return this.player1Hand;
+	}
+
+	// Returns the deck
+	public Deck getDeck() {
+		return this.deck;
+	}
+
+	// Returns the set of units
+	public Set<Unit> getUnits() {
+		return units;
+	}
 }

@@ -14,7 +14,6 @@ public class MouseMoved implements EventHandler<MouseEvent> {
 	}
 
 
-
 	@Override
 	public void handle(MouseEvent e) {
 		// Location of the mouse
