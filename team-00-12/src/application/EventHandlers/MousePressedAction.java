@@ -36,11 +36,13 @@ public class MousePressedAction implements EventHandler<MouseEvent> {
 		int mouseY = (int) e.getY();
 
 		currentPlayer = checkerboard.getCurrPlayer();
+		currentSelectedMovement = null;
 		Card c = checkerboardPane.getCardAt(mouseX, mouseY);
 		Unit u = getUnitSelected(boardX, boardY);
-
+		
 		if (u != null) { // Unit is selected
 			// Traverse 'units' set in checkerboardPane to redraw/update units
+			setSelectedMovement();
 			checkerboardPane.getUnits().forEach(unit -> {
 				// If unit's coordinates match calculated mouse press coordinates
 				if (unit.getX() == boardX && unit.getY() == boardY) {
