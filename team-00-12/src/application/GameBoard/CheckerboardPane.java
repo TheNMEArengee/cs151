@@ -33,7 +33,8 @@ public class CheckerboardPane extends Pane {
 	private Group tileGroup; // For checkerboard tiles
 	private Canvas canvas;
 	private GraphicsContext gc;
-	private Text t;
+	private Text currPlayer;
+	private Text currMove;
 	private int kingPawn = 1;
 
 	// Constructor for CheckerboardPane
@@ -41,8 +42,9 @@ public class CheckerboardPane extends Pane {
 		this.checkerboard = checkerboard;
 		this.checkerboardGridPane = new GridPane();
 		tileGroup = new Group();
-		t = new Text(10, 500, "Current Player : " + checkerboard.getCurrPlayerToString());
-		tileGroup.getChildren().add(t);
+		currPlayer = new Text(10, 500, "Current Player : " + checkerboard.getCurrPlayerToString());
+		currMove = new Text(10, 525, "Current Move : Pawn");
+		tileGroup.getChildren().addAll(currPlayer, currMove);
 		checkerboardGridPane.getChildren().add(tileGroup);
 		// checkerboardGridPane.getChildren().add(cardGroup);
 		this.units = new HashSet<>();
@@ -69,7 +71,6 @@ public class CheckerboardPane extends Pane {
 				}
 			}
 		}
-
 		// Units for Player 1
 		player = 1;
 		for (int y = 6; y < 8; y++) {
@@ -115,7 +116,8 @@ public class CheckerboardPane extends Pane {
 		drawBoard();
 		drawUnits();
 		drawCards();
-		drawCurrentPlayerLabel();
+		drawCurrentPlayerUI();
+		drawCurrentMoveUI();
 		getChildren().add(checkerboardGridPane);
 		getChildren().add(canvas);
 	}
@@ -159,8 +161,8 @@ public class CheckerboardPane extends Pane {
 			Rectangle r = new Rectangle(x, y, 40, 40);
 
 			// Rounded edges for units
-			//			r.setArcWidth(20);
-			//			r.setArcHeight(20);
+			// r.setArcWidth(20);
+			// r.setArcHeight(20);
 
 			// Determine color of pieces, check which player the unit belongs to
 			if (u.getPlayer() == 0) {
@@ -279,11 +281,24 @@ public class CheckerboardPane extends Pane {
 		Image i = new Image("img/pileofshitpawn.png", 50, 50, true, true);
 		gc.drawImage(i, 10 + (tileSize * 8) + 5, 10 + (tileSize * 3) + 30);
 	}
-	
-	
+
 	//
-	public void drawCurrentPlayerLabel() {
-		t.setText("Current Player : " + checkerboard.getCurrPlayerToString());
+	public void drawCurrentPlayerUI() {
+		currPlayer.setText("Current Player : " + checkerboard.getCurrPlayerToString());
+	}
+
+	public void drawCurrentMoveUI() {
+		Hand currentHand = checkerboard.getCurrPlayer() == 0 ? getPlayer0Hand() : getPlayer1Hand();
+		boolean cardSelected = false;
+		for (Card c : currentHand.getHand()) {
+			if (c.isSelected()) {
+				currMove.setText("Current Move : " + c.getTitle());
+				cardSelected = true;
+			}
+		}
+		if (cardSelected == false) {
+			currMove.setText("Current Move : Pawn");
+		}
 	}
 
 	// Draws the card that is hovered over by the mouse
@@ -334,7 +349,6 @@ public class CheckerboardPane extends Pane {
 		int whiteCardRegionTop = 10;
 		int whiteCardRegionBottom = whiteCardRegionTop + checkerboard.getCardSizeY();
 		int blackCardRegionTop = 10 + (tileSize * 6);
-		;
 		int blackCardRegionBottom = blackCardRegionTop + checkerboard.getCardSizeY();
 
 		// If the x area is within the card area

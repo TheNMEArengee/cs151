@@ -17,66 +17,47 @@ public class MouseReleasedAction implements EventHandler<MouseEvent> {
 	private Stage primaryStage;
 	private Scene welcomeScene;
 	private GraphicsContext gc;
-	
+	private Unit unitToRemove;
+	private Checkerboard checkerboard;
+	private Hand currentHand;
+	private Card cardSelected;
 
 	// Constructor
 	public MouseReleasedAction(CheckerboardPane checkerboardPane, Stage primaryStage, Scene welcomeScene) {
 		this.checkerboardPane = checkerboardPane;
 		this.primaryStage = primaryStage;
 		this.welcomeScene = welcomeScene;
-		 this.gc = checkerboardPane.getGraphicsContext();
+		this.gc = checkerboardPane.getGraphicsContext();
 	}
 
 	// Main Handler
 	@Override
 	public void handle(MouseEvent e) {
 		checkerboardPane.drawBoard();
-		Checkerboard checkerboard = checkerboardPane.getCheckerBoard();
+		checkerboard = checkerboardPane.getCheckerBoard();
 		int tileSize = checkerboard.getTileSize();
-
 		// Location of mouse release, translated to grid
 		int releasedX = (int) ((e.getX() - checkerboard.getInitX()) / (tileSize));
 		int releasedY = (int) ((e.getY() - checkerboard.getInitY()) / (tileSize));
-
+		// Used to check logic and keep track of which unit to remove
 		boolean validMove = true;
-		Unit unitToRemove = null;
-		
-		//Check what card is selected
-		Hand currentHand = null;
-		Card cardSelected = null;
-		//Save current player 0 or 1
-		//if 0 get 0's hand, else get 1's hand
-		if(checkerboard.getCurrPlayer() == 0) {
-			currentHand = checkerboardPane.getPlayer0Hand();
-		}
-		else if(checkerboard.getCurrPlayer() == 1) {
-			currentHand = checkerboardPane.getPlayer1Hand();
-		}
-		if(currentHand != null) {
-			for(Card c : currentHand.getHand()) {
-				if(c.isSelected()) {
-					cardSelected = c;
-					System.out.println("Clicked " + c.toString());
-				}
-			}
-		}
-		int movement = setCardSelectedMovement(cardSelected);
-		System.out.println(cardSelected.getDescription());
-		
+		unitToRemove = null;
+		// Check what card is selected
+		currentHand = null;
+		cardSelected = setCardSelected();
+		int movement = setCardSelectedMovement();
+
 		// Check all units to see which one is selected, then determine validity of
 		// movement with game logic
 		for (Unit u : checkerboardPane.getUnits()) {
-			int oldRole = u.getRole();
 			if (u.isSelected()) { // unit is selected
+				Unit unitAtReleasedCoords = unitExistsAtCoords(releasedX, releasedY, checkerboardPane);
 				if (checkerboard.getCurrPlayer() == u.getPlayer()) { // unit moved belongs to current player
 					// If the player did not just click and release on the same tile
-					if (!((u.getX() == releasedX) && (u.getY() == releasedY))) {
-						// Means they moved, set the unit's location to new coordinates
+					if (!((u.getX() == releasedX) && (u.getY() == releasedY))) { // They moved
 						if (releasedX < 8 && releasedY < 8) { // If in bounds
-							Unit unitAtReleasedCoords = unitExistsAtCoords(releasedX, releasedY, checkerboardPane);
-//							switch (u.getRole()) {
-							if(u.getRole()== 0) {
-								switch(movement) {
+							if (u.getRole() == 0) {
+								switch (movement) {
 								case 0: // Pawn: Move 1 forward
 									validMove = pawnLogic(u, unitAtReleasedCoords, releasedX, releasedY);
 									break;
@@ -95,41 +76,19 @@ public class MouseReleasedAction implements EventHandler<MouseEvent> {
 								case 5: // Queen: Combo of Rook + Bishop
 									validMove = queenLogic(u, releasedX, releasedY);
 								}
-							}
-							else if(u.getRole() == 1) {
+							} else if (u.getRole() == 1) {
 								validMove = kingLogic(u, releasedX, releasedY);
-							}
-
-							if (unitAtReleasedCoords != null) { // Check if unit exists at coords that unit wants to
-																// move to
-								// Check the unit's player
-								if (unitAtReleasedCoords.getPlayer() == u.getPlayer()) { // If own player's unit,
-																							// invalid
-																							// move
-									System.out.println("Invalid move: Player's own unit exists at destination.");
-									validMove = false;
-								} else { // Enemy unit, remove the enemy unit from the set
-									if (unitAtReleasedCoords.isKing()) {
-										System.out.println("Game Over!");
-										primaryStage.setScene(welcomeScene);
-										primaryStage.show();
-										break;
-									} else {
-										if (validMove == false) {
-											break;
-										} else {
-											System.out.println("Player " + checkerboard.getEnemyPlayer() + " ("
-													+ checkerboard.getEnemyPlayerToString() + ")" + " unit down!");
-										}
-									}
-									unitToRemove = unitAtReleasedCoords;
-								}
 							}
 						} else { // Out of bounds
 							validMove = false;
 						}
+						// If game logic passes, check if logic is valid at released coords
 						if (validMove) {
-							if(cardSelected != null) { // Used card, remove?
+							validMove = logicAtReleasedCoords(u, unitAtReleasedCoords);
+						}
+						// If released coord logic is valid, then we can update the boord with the move
+						if (validMove) {
+							if (cardSelected != null && u.getRole() != 1) { // Used card, remove?
 								cardSelected.setSelected(false);
 								currentHand.removeCard(cardSelected);
 								currentHand.addCard(checkerboardPane.getDeck().drawCard());
@@ -137,39 +96,51 @@ public class MouseReleasedAction implements EventHandler<MouseEvent> {
 							}
 							u.setX(releasedX);
 							u.setY(releasedY);
-							System.out.println("Player " + checkerboard.getCurrPlayer() + " (" + u.getColor() + ")"
-									+ " move to " + releasedX + ", " + releasedY + ".");
 							checkerboard.changePlayerTurn();
 						}
-					} else {
-						System.out.println("Invalid move: Drag only");
-						u.setSelected(false); // Remove if you want clicking
-						break;
 					}
-				} else {
-					System.out.println("Invalid: Not your turn. Player " + checkerboard.getCurrPlayer() + " ("
-							+ checkerboard.getCurrPlayerToString() + ")" + " turn.");
 				}
 				u.setSelected(false);
-				System.out.println("Unselected Unit.");
-				System.out.println("Player " + checkerboard.getCurrPlayer() + " ("
-						+ checkerboard.getCurrPlayerToString() + ")" + " turn.");
 			}
 		}
-		
+		updateGameView();
+	}
+
+	// Basically an update UI function
+	private void updateGameView() {
 		checkerboardPane.getUnits().remove(unitToRemove);
 		gc.clearRect(0, 0, 480, 480);
 		checkerboardPane.drawUnits();
-		checkerboardPane.drawCurrentPlayerLabel();
+		checkerboardPane.drawCurrentPlayerUI();
+		checkerboardPane.drawCurrentMoveUI();
 	}
 
-	private int setCardSelectedMovement(Card c) {
-		if(c != null) {
-			return c.getMovementTypeID();
+	// Used to find movement card that is selected
+	private Card setCardSelected() {
+		if (checkerboard.getCurrPlayer() == 0) {
+			currentHand = checkerboardPane.getPlayer0Hand();
+		} else if (checkerboard.getCurrPlayer() == 1) {
+			currentHand = checkerboardPane.getPlayer1Hand();
 		}
-		return 0; //default pawn
+		if (currentHand != null) {
+			for (Card c : currentHand.getHand()) {
+				if (c.isSelected()) {
+					return c;
+				}
+			}
+		}
+		return null;
 	}
-	
+
+	// Used to translate the card selected to a movement type
+	private int setCardSelectedMovement() {
+		if (cardSelected != null) {
+			return cardSelected.getMovementTypeID();
+		}
+		return 0; // default pawn
+	}
+
+	// Checks if unit exists at specified coordinates
 	public Unit unitExistsAtCoords(int x, int y, CheckerboardPane cp) {
 		Unit unitAtCoords = null;
 		for (Unit u : cp.getUnits()) {
@@ -178,6 +149,25 @@ public class MouseReleasedAction implements EventHandler<MouseEvent> {
 			}
 		}
 		return unitAtCoords;
+	}
+
+	// Check game logic for specified released location
+	private boolean logicAtReleasedCoords(Unit currentUnit, Unit releasedUnit) {
+		if (releasedUnit != null && (releasedUnit.getPlayer() != currentUnit.getPlayer())) {
+			if (releasedUnit.isKing()) {
+				System.out.println("Game Over!");
+				primaryStage.setScene(welcomeScene);
+				primaryStage.show();
+			} else {
+				System.out.println("Player " + checkerboard.getEnemyPlayer() + " ("
+						+ checkerboard.getEnemyPlayerToString() + ")" + " unit down!");
+			}
+			unitToRemove = releasedUnit;
+		} else if (releasedUnit != null) { // Valid move if null, moving to empty spot
+			System.out.println("Invalid Move.");
+			return false;
+		}
+		return true;
 	}
 
 	private boolean pawnLogic(Unit currentUnit, Unit releasedUnit, int releasedX, int releasedY) {
@@ -340,103 +330,18 @@ public class MouseReleasedAction implements EventHandler<MouseEvent> {
 		} else {
 			return false;
 		}
-
 		return true;
 	}
 
 	private boolean queenLogic(Unit currentUnit, int releasedX, int releasedY) {
 		int x_movement = releasedX - currentUnit.getX();
 		int y_movement = releasedY - currentUnit.getY();
-		Unit unitAtPath;
-
-		if (x_movement != 0 && y_movement == 0) { // Moving right/left
-			if (currentUnit.getX() > releasedX) {
-				for (int x = currentUnit.getX() - 1; x > releasedX; x--) {
-					unitAtPath = unitExistsAtCoords(x, currentUnit.getY(), checkerboardPane);
-					if (unitAtPath != null) {
-						System.out.println("No clear path to released location!");
-						return false;
-					}
-				}
-			} else if (currentUnit.getX() < releasedX) {
-				for (int x = currentUnit.getX() + 1; x < releasedX; x++) {
-					unitAtPath = unitExistsAtCoords(x, currentUnit.getY(), checkerboardPane);
-					if (unitAtPath != null) {
-						System.out.println("No clear path to released location!");
-						return false;
-					}
-				}
-			}
-		} else if (y_movement != 0 && x_movement == 0) { // Moving forward/back
-			if (currentUnit.getY() > releasedY) {
-				for (int y = currentUnit.getY() - 1; y > releasedY; y--) {
-					unitAtPath = unitExistsAtCoords(currentUnit.getX(), y, checkerboardPane);
-					if (unitAtPath != null) {
-						System.out.println("No clear path to released location!");
-						return false;
-					}
-				}
-			} else if (currentUnit.getY() < releasedY) {
-				for (int y = currentUnit.getY() + 1; y < releasedY; y++) {
-					unitAtPath = unitExistsAtCoords(currentUnit.getX(), y, checkerboardPane);
-					if (unitAtPath != null) {
-						System.out.println("No clear path to released location!");
-						return false;
-					}
-				}
-			}
-		} else if (Math.abs(x_movement) == Math.abs(y_movement)) { // Moving diagonal
-			int yCounter;
-			if (x_movement > 0) { // To the right
-				if (y_movement > 0) { // To the bottom
-					yCounter = 1;
-					for (int x = currentUnit.getX() + 1; x < releasedX; x++) {
-						unitAtPath = unitExistsAtCoords(x, currentUnit.getY() + yCounter, checkerboardPane);
-						if (unitAtPath != null) {
-							System.out.println("No clear path to released location!");
-							return false;
-						}
-						yCounter++;
-					}
-				} else if (y_movement < 0) {
-					yCounter = -1;
-					for (int x = currentUnit.getX() + 1; x < releasedX; x++) {
-						unitAtPath = unitExistsAtCoords(x, currentUnit.getY() + yCounter, checkerboardPane);
-						if (unitAtPath != null) {
-							System.out.println("No clear path to released location!");
-							return false;
-						}
-						yCounter--;
-					}
-				}
-			} else if (x_movement < 0) { // To the left
-				if (y_movement > 0) { // To the bottom
-					yCounter = 1;
-					for (int x = currentUnit.getX() - 1; x > releasedX; x--) {
-						unitAtPath = unitExistsAtCoords(x, currentUnit.getY() + yCounter, checkerboardPane);
-						if (unitAtPath != null) {
-							System.out.println("No clear path to released location!");
-							return false;
-						}
-						yCounter++;
-					}
-				} else if (y_movement < 0) { // To the top
-					yCounter = -1;
-					for (int x = currentUnit.getX() - 1; x > releasedX; x--) {
-						unitAtPath = unitExistsAtCoords(x, currentUnit.getY() + yCounter, checkerboardPane);
-						if (unitAtPath != null) {
-							System.out.println("No clear path to released location!");
-							return false;
-						}
-						yCounter--;
-					}
-				}
-
-			}
-
+		if (x_movement != 0 && y_movement == 0 || x_movement == 0 && y_movement != 0) {
+			return rookLogic(currentUnit, releasedX, releasedY);
+		} else if (Math.abs(x_movement) == Math.abs(y_movement)) {
+			return bishopLogic(currentUnit, releasedX, releasedY);
 		} else {
 			return false;
 		}
-		return true;
 	}
 }
