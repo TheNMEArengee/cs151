@@ -97,6 +97,7 @@ public class MouseReleasedAction implements EventHandler<MouseEvent> {
 							u.setX(releasedX);
 							u.setY(releasedY);
 							checkerboard.changePlayerTurn();
+							checkerboardPane.resetCurrentMoveUI();
 						}
 					}
 				}
@@ -209,7 +210,6 @@ public class MouseReleasedAction implements EventHandler<MouseEvent> {
 		if (x_movement != 0 && y_movement != 0) {
 			return false;
 		} else if (x_movement != 0) { // Moving right/left
-			System.out.println("getX: " + currentUnit.getX() + " released: " + releasedX);
 			if (currentUnit.getX() > releasedX) {
 				for (int x = currentUnit.getX() - 1; x > releasedX; x--) {
 					unitAtPath = unitExistsAtCoords(x, currentUnit.getY(), checkerboardPane);
