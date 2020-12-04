@@ -37,9 +37,9 @@ public class MousePressedAction implements EventHandler<MouseEvent> {
 
 		currentPlayer = checkerboard.getCurrPlayer();
 		Card c = checkerboardPane.getCardAt(mouseX, mouseY);
-		setSelectedMovement();
+		Unit u = getUnitSelected(boardX, boardY);
 
-		if (c == null) { // Card is not selected
+		if (u != null) { // Unit is selected
 			// Traverse 'units' set in checkerboardPane to redraw/update units
 			checkerboardPane.getUnits().forEach(unit -> {
 				// If unit's coordinates match calculated mouse press coordinates
@@ -56,7 +56,7 @@ public class MousePressedAction implements EventHandler<MouseEvent> {
 					checkerboardPane.drawUnits();
 				}
 			});
-		} else { // Card is selected
+		} else if (c != null) { // Card is selected
 			// if else used to reset selected, then set selected to that card
 			int cardOwner = (c.getAffiliation().toString() == "WHITE") ? 0 : 1;
 			if (currentPlayer == 0 && currentPlayer == cardOwner) {
@@ -65,38 +65,39 @@ public class MousePressedAction implements EventHandler<MouseEvent> {
 			} else if (currentPlayer == 1 && currentPlayer == cardOwner) {
 				checkerboardPane.getPlayer1Hand().resetSelectedCards();
 				c.setSelected(true);
-
 			}
+			setSelectedMovement();
+		} else {
+			currentSelectedMovement = null;
+			checkerboardPane.resetCurrentMoveUI();
 		}
 
 	}
+	
+	private Unit getUnitSelected(int boardX, int boardY) {
+		checkerboardPane.getUnits();
+		for (Unit u : checkerboardPane.getUnits()) {
+			if (boardX == u.getX() && boardY == u.getY()) {
+				return u;
+			}
+		}
+		return null;
+	}
 
 	private void setSelectedMovement() {
-		Card basicMovement = new Card(null, 0);
-		boolean cardSelected = false;
 		if (currentPlayer == 0) {
 			for (Card c : checkerboardPane.getPlayer0Hand().getHand()) {
 				if (c.isSelected()) {
 					currentSelectedMovement = c;
-					cardSelected = true;
 					break;
 				}
-			}
-			if (cardSelected == false) {
-				basicMovement.setAffiliation(Affiliation.WHITE);
-				currentSelectedMovement = basicMovement;
 			}
 		} else if (currentPlayer == 1) {
 			for (Card c : checkerboardPane.getPlayer1Hand().getHand()) {
 				if (c.isSelected()) {
 					currentSelectedMovement = c;
-					cardSelected = true;
 					break;
 				}
-			}
-			if (cardSelected == false) {
-				basicMovement.setAffiliation(Affiliation.BLACK);
-				currentSelectedMovement = basicMovement;
 			}
 		}
 	}
@@ -147,7 +148,7 @@ public class MousePressedAction implements EventHandler<MouseEvent> {
 		}
 	}
 
-	//Un-highlight method for colorKnightSquares()
+	// Un-highlight method for colorKnightSquares()
 	private void unhighlight(Unit unit) {
 		// For the 2x2 area around it
 		for (int x = unit.getX() - 2; x <= unit.getX() + 2; x++) {
@@ -245,7 +246,7 @@ public class MousePressedAction implements EventHandler<MouseEvent> {
 	}
 
 	// Check bottom left diagonal squares for colorBishopSquares() method
-	private void colorBishopSquaresBottomLeft(Unit unit) { 
+	private void colorBishopSquaresBottomLeft(Unit unit) {
 		// Check bottom left diagonal
 		int k = 1;
 		while (unit.getX() - k >= 0 && unit.getY() + k <= 7) {
@@ -271,7 +272,7 @@ public class MousePressedAction implements EventHandler<MouseEvent> {
 	}
 
 	// Check bottom right diagonal squares for colorBishopSquares() method
-	private void colorBishopSquaresBottomRight(Unit unit) { 
+	private void colorBishopSquaresBottomRight(Unit unit) {
 		// Check bottom right diagonal
 		int l = 1;
 		while (unit.getX() + l <= 7 && unit.getY() + l <= 7) {
@@ -412,7 +413,7 @@ public class MousePressedAction implements EventHandler<MouseEvent> {
 					if (otherUnit == null || areOpposingUnits(unit, otherUnit)) {
 						tiledFillRect(x, y);
 					}
-				}		
+				}
 			}
 		}
 	}
