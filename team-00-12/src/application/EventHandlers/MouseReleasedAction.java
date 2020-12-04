@@ -6,10 +6,14 @@ import application.CardContainers.Hand;
 import application.GameBoard.Checkerboard;
 import application.GameBoard.CheckerboardPane;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.layout.VBox;
 
 // Used for unit movement (moving the selected unit to a tile)
 public class MouseReleasedAction implements EventHandler<MouseEvent> {
@@ -21,12 +25,16 @@ public class MouseReleasedAction implements EventHandler<MouseEvent> {
 	private Checkerboard checkerboard;
 	private Hand currentHand;
 	private Card cardSelected;
+	private Scene gameFinished;
+	
 
 	// Constructor
-	public MouseReleasedAction(CheckerboardPane checkerboardPane, Stage primaryStage, Scene welcomeScene) {
+	public MouseReleasedAction(CheckerboardPane checkerboardPane, Stage primaryStage, Scene welcomeScene, Scene gameFinished)
+	{
 		this.checkerboardPane = checkerboardPane;
 		this.primaryStage = primaryStage;
 		this.welcomeScene = welcomeScene;
+		this.gameFinished = gameFinished;
 		this.gc = checkerboardPane.getGraphicsContext();
 	}
 
@@ -156,7 +164,8 @@ public class MouseReleasedAction implements EventHandler<MouseEvent> {
 		if (releasedUnit != null && (releasedUnit.getPlayer() != currentUnit.getPlayer())) {
 			if (releasedUnit.isKing()) {
 				System.out.println("Game Over!");
-				primaryStage.setScene(welcomeScene);
+			
+				primaryStage.setScene(gameFinished);
 				primaryStage.show();
 			} else {
 				System.out.println("Player " + checkerboard.getEnemyPlayer() + " ("
@@ -169,6 +178,7 @@ public class MouseReleasedAction implements EventHandler<MouseEvent> {
 		}
 		return true;
 	}
+	
 
 	private boolean pawnLogic(Unit currentUnit, Unit releasedUnit, int releasedX, int releasedY) {
 		int validMovement = (currentUnit.getPlayer() == 0 ? 1 : -1); // Player 0: +1. Player 1: -1
