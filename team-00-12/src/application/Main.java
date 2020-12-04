@@ -35,45 +35,42 @@ public class Main extends Application {
 			VBox vbox = constructVBox();
 			vbox.setPadding(new Insets(10, 10, 10, 10));
 			BorderPane root = new BorderPane();
-
 			root.setCenter(vbox);
 			Scene welcomeScene = new Scene(root, 400, 400);
 			primaryStage.setScene(welcomeScene);
 			
 			
-			VBox overBox = constructVBox();
-			BorderPane overScreen = new BorderPane();
-			overScreen.setCenter(overBox);
+			//Creating game over screen containers
+			VBox gameOverBox = constructVBox();
+			BorderPane gameOverScreen = new BorderPane();
+			gameOverScreen.setCenter(gameOverBox);
 			Label overMessage = new Label("Game over! "+ "You won!");
-			Scene gameFinished = new Scene(overScreen, 400, 400);
-			
-			
+			Scene gameFinished = new Scene(gameOverScreen, 400, 400);	
 			
 			
 			// Creating buttons and title screen label
-		
 			Button forfeitButton = createForfeitButton(primaryStage, gameFinished);
 			Button backButton = createBackButton(primaryStage, welcomeScene);
 			Button gameoverbackButton = createBackButton(primaryStage, welcomeScene);
 			Button startButton = createStartButton(primaryStage, welcomeScene, backButton, forfeitButton, gameFinished);
 			Button tutorialButton = createTutorialButton(primaryStage, backButton);
 			Button quitButton = createQuitButton(primaryStage);
-			
 			Label titleLabel = new Label("Chess Fight");
 			titleLabel.setStyle("-fx-font-size: 20;");
-			vbox.getChildren().addAll(titleLabel, startButton, tutorialButton, quitButton);
 			
-			overBox.getChildren().addAll(overMessage,gameoverbackButton);
+			
+			//Add everything to the vboxes
+			vbox.getChildren().addAll(titleLabel, startButton, tutorialButton, quitButton);
+			gameOverBox.getChildren().addAll(overMessage,gameoverbackButton);
 
+			
 			// MasterCard Circles #ad
 			Circle redCircle = createCircle(Color.rgb(235, 0, 27), 20, 30, 30);
 			Circle goldCircle = createCircle(Color.rgb(247, 158, 27), 20, 50, 30);
 			root.getChildren().addAll(redCircle, goldCircle);
 			
-			
 		
-			//primaryStage.setScene(gameFinished);
-		
+			//Show stage
 			primaryStage.setTitle("Chess Fight");
 			primaryStage.show();
 		} catch (Exception e) {
