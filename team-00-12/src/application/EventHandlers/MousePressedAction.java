@@ -1,6 +1,5 @@
 package application.EventHandlers;
 
-import application.Affiliation;
 import application.Card;
 import application.Unit;
 import application.GameBoard.Checkerboard;
@@ -73,7 +72,7 @@ public class MousePressedAction implements EventHandler<MouseEvent> {
 		}
 
 	}
-	
+
 	private Unit getUnitSelected(int boardX, int boardY) {
 		checkerboardPane.getUnits();
 		for (Unit u : checkerboardPane.getUnits()) {

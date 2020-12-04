@@ -6,9 +6,7 @@ import java.util.ArrayList;
 import java.util.Set;
 import application.Unit;
 import application.CardContainers.Deck;
-import application.CardContainers.Effect;
 import application.CardContainers.Hand;
-import javafx.scene.control.Label;
 import application.Affiliation;
 import application.Card;
 import javafx.scene.Group;
@@ -19,7 +17,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 //Checkerboard field's controller basically
@@ -288,7 +285,8 @@ public class CheckerboardPane extends Pane {
 			}
 		}
 	}
-	
+
+	// Resets the card selected to null if you unselect a card
 	public void resetCurrentMoveUI() {
 		Hand currentHand = checkerboard.getCurrPlayer() == 0 ? getPlayer0Hand() : getPlayer1Hand();
 		for (Card c : currentHand.getHand()) {
