@@ -4,11 +4,12 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.ArrayList;
 import java.util.Set;
-import application.Unit;
+
 import application.CardContainers.Deck;
 import application.CardContainers.Hand;
-import application.Affiliation;
-import application.Card;
+import application.Elements.Affiliation;
+import application.Elements.Card;
+import application.Elements.Unit;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;

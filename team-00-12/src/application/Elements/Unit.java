@@ -1,4 +1,4 @@
-package application;
+package application.Elements;
 
 // Game pieces, aka Units
 public class Unit {

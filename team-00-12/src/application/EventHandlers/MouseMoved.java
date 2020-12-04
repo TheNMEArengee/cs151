@@ -9,9 +9,10 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import java.util.ArrayList;
-import application.Affiliation;
-import application.Card;
+
 import application.CardContainers.Effect;
+import application.Elements.Affiliation;
+import application.Elements.Card;
 import application.GameBoard.Checkerboard;
 import application.GameBoard.CheckerboardPane;
 import javafx.event.EventHandler;

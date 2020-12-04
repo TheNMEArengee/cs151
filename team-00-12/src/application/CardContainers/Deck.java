@@ -4,8 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Queue;
-import application.Affiliation;
-import application.Card;
+
+import application.Elements.Affiliation;
+import application.Elements.Card;
 
 
 public class Deck{

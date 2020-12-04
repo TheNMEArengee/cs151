@@ -1,8 +1,9 @@
 package application.CardContainers;
 
 import java.util.ArrayList;
-import application.Affiliation;
-import application.Card;
+
+import application.Elements.Affiliation;
+import application.Elements.Card;
 
 public class Hand {
 	private ArrayList<Card> hand;

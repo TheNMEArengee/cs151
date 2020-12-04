@@ -1,7 +1,7 @@
 package application.EventHandlers;
 
-import application.Card;
-import application.Unit;
+import application.Elements.Card;
+import application.Elements.Unit;
 import application.GameBoard.Checkerboard;
 import application.GameBoard.CheckerboardPane;
 import javafx.event.EventHandler;
