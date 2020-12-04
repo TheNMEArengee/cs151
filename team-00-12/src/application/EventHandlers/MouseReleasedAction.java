@@ -303,9 +303,7 @@ public class MouseReleasedAction implements EventHandler<MouseEvent> {
 						yCounter--;
 					}
 				}
-
 			}
-
 		} else {
 			return false;
 		}
