@@ -289,16 +289,21 @@ public class CheckerboardPane extends Pane {
 
 	public void drawCurrentMoveUI() {
 		Hand currentHand = checkerboard.getCurrPlayer() == 0 ? getPlayer0Hand() : getPlayer1Hand();
-		boolean cardSelected = false;
 		for (Card c : currentHand.getHand()) {
 			if (c.isSelected()) {
 				currMove.setText("Current Move : " + c.getTitle());
-				cardSelected = true;
 			}
 		}
-		if (cardSelected == false) {
-			currMove.setText("Current Move : Pawn");
+	}
+	
+	public void resetCurrentMoveUI() {
+		Hand currentHand = checkerboard.getCurrPlayer() == 0 ? getPlayer0Hand() : getPlayer1Hand();
+		for (Card c : currentHand.getHand()) {
+			if (c.isSelected()) {
+				c.setSelected(false);
+			}
 		}
+		currMove.setText("Current Move : Pawn");
 	}
 
 	// Draws the card that is hovered over by the mouse
