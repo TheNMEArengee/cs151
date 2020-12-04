@@ -3,7 +3,6 @@ package application.EventHandlers;
 import application.Affiliation;
 import application.Card;
 import application.Unit;
-import application.CardContainers.Deck;
 import application.GameBoard.Checkerboard;
 import application.GameBoard.CheckerboardPane;
 import javafx.event.EventHandler;
@@ -32,7 +31,7 @@ public class MousePressedAction implements EventHandler<MouseEvent> {
 		// For the units, Location of mouse press, translated to grid
 		int boardX = (int) e.getX() / tileSize;
 		int boardY = (int) e.getY() / tileSize;
-		// Coords for the cards
+		// Co-ords for the cards
 		int mouseX = (int) e.getX();
 		int mouseY = (int) e.getY();
 
@@ -148,7 +147,7 @@ public class MousePressedAction implements EventHandler<MouseEvent> {
 		}
 	}
 
-	//Unhighlight method for colorKnightSquares()
+	//Un-highlight method for colorKnightSquares()
 	private void unhighlight(Unit unit) {
 		// For the 2x2 area around it
 		for (int x = unit.getX() - 2; x <= unit.getX() + 2; x++) {
@@ -184,17 +183,21 @@ public class MousePressedAction implements EventHandler<MouseEvent> {
 		}
 	}
 
-
 	// Highlights all the valid squares a Bishop can move
 	private void colorBishopSquares(Unit unit) {
-		Unit otherUnit = null;
+		colorBishopSquaresTopLeft(unit);
+		colorBishopSquaresTopRight(unit);
+		colorBishopSquaresBottomLeft(unit);
+		colorBishopSquaresBottomRight(unit);
+	}
 
-		// Check top left diagonal
+	// Check top left diagonal squares for colorBishopSquares() method
+	private void colorBishopSquaresTopLeft(Unit unit) {
 		int i = 1;
 
 		// While checked square doesn't exceed game board
 		while (unit.getX() - i >= 0 && unit.getY() - i >= 0) {
-			otherUnit = getUnitAt(unit.getX() - i, unit.getY() - i);
+			Unit otherUnit = getUnitAt(unit.getX() - i, unit.getY() - i);
 			// If a unit exists at target square
 			if (otherUnit != null) {
 				// If its a unit of the same side, break immediately
@@ -211,14 +214,16 @@ public class MousePressedAction implements EventHandler<MouseEvent> {
 			else {
 				tiledFillRect(unit.getX() - i, unit.getY() - i);
 			}
-
 			i++;
 		}
+	}
 
+	// Check top right diagonal squares for colorBishopSquares() method
+	private void colorBishopSquaresTopRight(Unit unit) {
 		// Check top right diagonal
 		int j = 1;
 		while (unit.getX() + j <= 7 && unit.getY() - j >= 0) {
-			otherUnit = getUnitAt(unit.getX() + j, unit.getY() - j);
+			Unit otherUnit = getUnitAt(unit.getX() + j, unit.getY() - j);
 			// If a unit exists at target square
 			if (otherUnit != null) {
 				// If its a unit of the same side, break immediately
@@ -237,11 +242,14 @@ public class MousePressedAction implements EventHandler<MouseEvent> {
 			}
 			j++;
 		}
+	}
 
+	// Check bottom left diagonal squares for colorBishopSquares() method
+	private void colorBishopSquaresBottomLeft(Unit unit) { 
 		// Check bottom left diagonal
 		int k = 1;
 		while (unit.getX() - k >= 0 && unit.getY() + k <= 7) {
-			otherUnit = getUnitAt(unit.getX() - k, unit.getY() + k);
+			Unit otherUnit = getUnitAt(unit.getX() - k, unit.getY() + k);
 			// If a unit exists at target square
 			if (otherUnit != null) {
 				// If its a unit of the same side, break immediately
@@ -260,11 +268,14 @@ public class MousePressedAction implements EventHandler<MouseEvent> {
 			}
 			k++;
 		}
+	}
 
+	// Check bottom right diagonal squares for colorBishopSquares() method
+	private void colorBishopSquaresBottomRight(Unit unit) { 
 		// Check bottom right diagonal
 		int l = 1;
 		while (unit.getX() + l <= 7 && unit.getY() + l <= 7) {
-			otherUnit = getUnitAt(unit.getX() + l, unit.getY() + l);
+			Unit otherUnit = getUnitAt(unit.getX() + l, unit.getY() + l);
 			// If a unit exists at target square
 			if (otherUnit != null) {
 				// If its a unit of the same side, break immediately
@@ -287,12 +298,17 @@ public class MousePressedAction implements EventHandler<MouseEvent> {
 
 	// Highlights all the valid squares a Rook can move
 	private void colorRookSquares(Unit unit) {
-		Unit otherUnit = null;
+		colorRookSquaresLeft(unit);
+		colorRookSquaresRight(unit);
+		colorRookSquaresTop(unit);
+		colorRookSquaresBottom(unit);
+	}
 
-		// Check left
+	// Check left squares for colorBishopSquares() method
+	private void colorRookSquaresLeft(Unit unit) {
 		// While in bounds
 		for (int x = unit.getX() - 1; x >= 0; x--) {
-			otherUnit = getUnitAt(x, unit.getY());
+			Unit otherUnit = getUnitAt(x, unit.getY());
 			// If a unit is on the path
 			if (otherUnit != null) {
 				// If its a friendly unit, break immediately
@@ -310,11 +326,13 @@ public class MousePressedAction implements EventHandler<MouseEvent> {
 				tiledFillRect(x, unit.getY());
 			}
 		}
+	}
 
-		// Check right
+	// Check right squares for colorBishopSquares() method
+	private void colorRookSquaresRight(Unit unit) {
 		// While in bounds
 		for (int x = unit.getX() + 1; x <= 7; x++) {
-			otherUnit = getUnitAt(x, unit.getY());
+			Unit otherUnit = getUnitAt(x, unit.getY());
 			// If a unit is on the path
 			if (otherUnit != null) {
 				// If its a friendly unit, break immediately
@@ -332,11 +350,13 @@ public class MousePressedAction implements EventHandler<MouseEvent> {
 				tiledFillRect(x, unit.getY());
 			}
 		}
+	}
 
-		// Check up
+	// Check top squares for colorBishopSquares() method
+	private void colorRookSquaresTop(Unit unit) {
 		// While in bounds
 		for (int y = unit.getY() - 1; y >= 0; y--) {
-			otherUnit = getUnitAt(unit.getX(), y);
+			Unit otherUnit = getUnitAt(unit.getX(), y);
 			// If a unit is on the path
 			if (otherUnit != null) {
 				// If its a friendly unit, break immediately
@@ -354,11 +374,13 @@ public class MousePressedAction implements EventHandler<MouseEvent> {
 				tiledFillRect(unit.getX(), y);
 			}
 		}
+	}
 
-		// Check down
+	// Check bottom squares for colorBishopSquares() method
+	private void colorRookSquaresBottom(Unit unit) {
 		// While in bounds
 		for (int y = unit.getY() + 1; y <= 7; y++) {
-			otherUnit = getUnitAt(unit.getX(), y);
+			Unit otherUnit = getUnitAt(unit.getX(), y);
 			// If a unit is on the path
 			if (otherUnit != null) {
 				// If its a friendly unit, break immediately
@@ -383,11 +405,14 @@ public class MousePressedAction implements EventHandler<MouseEvent> {
 		// For the immediate area around it
 		for (int x = unit.getX() - 1; x <= unit.getX() + 1; x++) {
 			for (int y = unit.getY() - 1; y <= unit.getY() + 1; y++) {
-				Unit otherUnit = getUnitAt(x, y);
-				// If there is no unit or an enemy unit, color the square
-				if (otherUnit == null || areOpposingUnits(unit, otherUnit)) {
-					tiledFillRect(x, y);
-				}
+				// If the square is in bounds
+				if (x >= 0 && x <= 7 && y >= 0 & y <= 7) {
+					Unit otherUnit = getUnitAt(x, y);
+					// If there is no unit or an enemy unit, color the square
+					if (otherUnit == null || areOpposingUnits(unit, otherUnit)) {
+						tiledFillRect(x, y);
+					}
+				}		
 			}
 		}
 	}
