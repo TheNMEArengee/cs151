@@ -29,41 +29,55 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			System.out.println("Chess Fight by Jason Huynh, Eric Nguyen, and Justin Zhu");						
-			
-			
-			//Creating home screen containers
+			System.out.println("Chess Fight by Jason Huynh, Eric Nguyen, and Justin Zhu");
+
+			// Creating home screen containers
 			VBox vbox = constructVBox();
 			vbox.setPadding(new Insets(10, 10, 10, 10));
 			BorderPane root = new BorderPane();
 			root.setCenter(vbox);
 			Scene welcomeScene = new Scene(root, 400, 400);
 			primaryStage.setScene(welcomeScene);
-
 			
-			//Creating buttons and title screen label
+			
+			//Creating game over screen containers
+			VBox gameOverBox = constructVBox();
+			BorderPane gameOverScreen = new BorderPane();
+			gameOverScreen.setCenter(gameOverBox);
+			Label overMessage = new Label("Game over! "+ "You won!");
+			Scene gameFinished = new Scene(gameOverScreen, 400, 400);	
+			
+			
+			// Creating buttons and title screen label
+			Button forfeitButton = createForfeitButton(primaryStage, gameFinished);
 			Button backButton = createBackButton(primaryStage, welcomeScene);
-			Button startButton = createStartButton(primaryStage, welcomeScene, backButton);
+			Button gameoverbackButton = createBackButton(primaryStage, welcomeScene);
+			Button startButton = createStartButton(primaryStage, welcomeScene, backButton, forfeitButton, gameFinished);
 			Button tutorialButton = createTutorialButton(primaryStage, backButton);
 			Button quitButton = createQuitButton(primaryStage);
 			Label titleLabel = new Label("Chess Fight");
 			titleLabel.setStyle("-fx-font-size: 20;");
+			
+			
+			//Add everything to the vboxes
 			vbox.getChildren().addAll(titleLabel, startButton, tutorialButton, quitButton);
+			gameOverBox.getChildren().addAll(overMessage,gameoverbackButton);
 
 			
 			// MasterCard Circles #ad
 			Circle redCircle = createCircle(Color.rgb(235, 0, 27), 20, 30, 30);
 			Circle goldCircle = createCircle(Color.rgb(247, 158, 27), 20, 50, 30);
 			root.getChildren().addAll(redCircle, goldCircle);
-
-
+			
+		
+			//Show stage
 			primaryStage.setTitle("Chess Fight");
 			primaryStage.show();
-		} 
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
+	
 
 
 	// Create Circle Functions for MasterCard Circles #ad
@@ -90,9 +104,8 @@ public class Main extends Application {
 		return c;
 	}
 
-	
-	//Creates the start button
-	private Button createStartButton(Stage primaryStage, Scene welcomeScene, Button backBtn) {
+	// Creates the start button
+	private Button createStartButton(Stage primaryStage, Scene welcomeScene, Button backBtn, Button forfeitBtn, Scene gameFinished) {
 		Button startBtn = new Button("Start");
 		startBtn.setPrefSize(100, 60);
 
@@ -104,13 +117,15 @@ public class Main extends Application {
 			Checkerboard checkerboard = Checkerboard.getInstance();
 			checkerboard.setCurrentPlayer(0); // Ensure Player 0 starts every time 'Start' is pressed.
 			CheckerboardPane checkerboardPane = new CheckerboardPane(checkerboard);
-			battleField.getChildren().addAll(checkerboardPane, backBtn);
+			battleField.getChildren().addAll(checkerboardPane, backBtn, forfeitBtn);
 			checkerboardPane.setOnMousePressed(new MousePressedAction(checkerboardPane));
-			checkerboardPane.setOnMouseReleased(new MouseReleasedAction(checkerboardPane, primaryStage, welcomeScene));
+			checkerboardPane.setOnMouseReleased(new MouseReleasedAction(checkerboardPane, primaryStage, welcomeScene, gameFinished));
 			checkerboardPane.setOnMouseMoved(new MouseMoved(checkerboardPane));
 			BorderPane bp = new BorderPane();
 			bp.setCenter(battleField);
 			Scene battleFieldInit = new Scene(bp, 800, 650);
+		
+			
 			primaryStage.setScene(battleFieldInit);
 			primaryStage.show();
 		});
@@ -118,12 +133,10 @@ public class Main extends Application {
 		return startBtn;
 	}
 
-
-	//Creates the tutorial button
+	// Creates the tutorial button
 	private Button createTutorialButton(Stage primaryStage, Button backBtn) {
 		Button tutorialBtn = new Button("Tutorial");
 		tutorialBtn.setPrefSize(100, 60);
-
 
 		tutorialBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
 			// Creating the container for the tutorial scene
@@ -148,30 +161,24 @@ public class Main extends Application {
 			primaryStage.setScene(tutorialScene);
 		});
 
-
 		return tutorialBtn;
 	}
 
-
-	//Creates the quit button
-	private Button createQuitButton(Stage primaryStage) { 
+	// Creates the quit button
+	private Button createQuitButton(Stage primaryStage) {
 		Button quitBtn = new Button("Quit");
 		quitBtn.setPrefSize(100, 60);
-
 
 		// Event handler for back button on title screen. Exits the application
 		quitBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> primaryStage.close());
 
-
 		return quitBtn;
 	}
 
-
-	//Creates the back button
+	// Creates the back button
 	private Button createBackButton(Stage primaryStage, Scene welcomeScene) {
 		Button backBtn = new Button("Back");
 		backBtn.setPrefSize(100, 60);
-
 
 		// Event handler for tutorial back button. Sends the user back to the title
 		// screen
@@ -181,10 +188,23 @@ public class Main extends Application {
 			primaryStage.show();
 		});
 
+		return backBtn;
+	}
+	
+	private Button createForfeitButton(Stage primaryStage, Scene gameFinished) {
+		Button backBtn = new Button("Forfeit");
+		backBtn.setPrefSize(100, 60);
+
+		// Event handler for tutorial back button. Sends the user back to the title
+		// screen
+		backBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
+			primaryStage.close();
+			primaryStage.setScene(gameFinished);
+			primaryStage.show();
+		});
 
 		return backBtn;
 	}
-
 
 	// Constructs a VBox with the dimensions specified below
 	private VBox constructVBox() {
@@ -195,10 +215,7 @@ public class Main extends Application {
 		return vbox;
 	}
 
-	
-
-
-	//Runs the program
+	// Runs the program
 	public static void main(String[] args) {
 		launch(args);
 	}

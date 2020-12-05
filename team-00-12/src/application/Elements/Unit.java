@@ -1,4 +1,4 @@
-package application;
+package application.Elements;
 
 // Game pieces, aka Units
 public class Unit {
@@ -20,38 +20,30 @@ public class Unit {
 	}
 
 	/* Get and Set methods */
-
-
 	public int getX() {
 		return this.x;
 	}
 
-	/* get the y coordinate */
 	public int getY() {
 		return this.y;
 	}
 
-	/*Sets the current X coordinate to the new X coordinate*/
 	public void setX(int x) {
 		this.x = x;
 	}
 
-	/*Sets the current Y coordinate to the new Y coordinate*/
 	public void setY(int y) {
 		this.y = y;
 	}
 
-	/*Get the player; returns either a 0 or 1*/
 	public int getPlayer() {
 		return this.player;
 	}
 
-	/*Get the color of the player; returns a string*/
 	public String getColor() {
 		return this.color;
 	}
 
-	/*returns the color of the opponent; Uses 1 or 0 to determine the opposing player */
 	public String getEnemyColor() {
 		if (this.player == 0) {
 			return "Black";
@@ -60,24 +52,19 @@ public class Unit {
 		}
 		return "Error";
 	}
-
-	/*A boolean that returns a true or false when determining a king; 
-	 *It is based off the role of the current unit */
+	
 	public boolean isKing() {
 		return this.role == 1 ? true : false;
 	}
-
-	//Returns the role
+	
 	public int getRole() {
 		return this.role;
 	}
 
-	//Sets the selected variable of the unit to the input variable
 	public void setSelected(boolean b) {
 		this.selected = b;
 	}
 
-	//Returns the selected variable state
 	public boolean isSelected() {
 		return this.selected;
 	}

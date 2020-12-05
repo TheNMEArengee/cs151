@@ -4,13 +4,12 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.ArrayList;
 import java.util.Set;
-import application.Unit;
+
 import application.CardContainers.Deck;
-import application.CardContainers.Effect;
 import application.CardContainers.Hand;
-import javafx.scene.control.Label;
-import application.Affiliation;
-import application.Card;
+import application.Elements.Affiliation;
+import application.Elements.Card;
+import application.Elements.Unit;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -19,7 +18,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 //Checkerboard field's controller basically
@@ -33,29 +31,39 @@ public class CheckerboardPane extends Pane {
 	private Group tileGroup; // For checkerboard tiles
 	private Canvas canvas;
 	private GraphicsContext gc;
-	private Text t;
+	private Text currPlayer;
+	private Text currMove;
 	private int kingPawn = 1;
 
 	// Constructor for CheckerboardPane
 	public CheckerboardPane(Checkerboard checkerboard) {
-		this.checkerboard = checkerboard;
-		this.checkerboardGridPane = new GridPane();
-		tileGroup = new Group();
-		t = new Text(10, 500, "Current Player : " + checkerboard.getCurrPlayerToString());
-		tileGroup.getChildren().add(t);
-		checkerboardGridPane.getChildren().add(tileGroup);
-		// checkerboardGridPane.getChildren().add(cardGroup);
+		// Initializing everything
 		this.units = new HashSet<>();
 		this.player0Hand = new Hand(Affiliation.WHITE);
 		this.player1Hand = new Hand(Affiliation.BLACK);
 		this.deck = new Deck();
-		setUnits();
-		setCards();
-		canvas = new Canvas(800, 480);
-		gc = canvas.getGraphicsContext2D();
-		draw();
+		this.checkerboard = checkerboard;
+		this.checkerboardGridPane = new GridPane();
+		this.tileGroup = new Group();
+		this.canvas = new Canvas(800, 480);
+		this.gc = canvas.getGraphicsContext2D();
+		this.currPlayer = new Text(10, 500, "Current Player : " + checkerboard.getCurrPlayerToString());
+		this.currMove = new Text(10, 525, "Current Move : Pawn");
+		
+		
+		// Set and draw everything
+		tileGroup.getChildren().addAll(currPlayer, currMove);
+		checkerboardGridPane.getChildren().add(tileGroup);
+		setElements();
+		drawElements();
 	}
 
+	// Used in ctor to set everything
+	public void setElements() {
+		setUnits();
+		setCards();
+	}
+	
 	// Place the player units onto board (init/reset)
 	public void setUnits() {
 		// Units for player 0
@@ -69,7 +77,6 @@ public class CheckerboardPane extends Pane {
 				}
 			}
 		}
-
 		// Units for Player 1
 		player = 1;
 		for (int y = 6; y < 8; y++) {
@@ -111,11 +118,12 @@ public class CheckerboardPane extends Pane {
 	}
 
 	// Used in ctor to draw and show everything
-	public void draw() {
+	public void drawElements() {
 		drawBoard();
 		drawUnits();
 		drawCards();
-		drawCurrentPlayerLabel();
+		drawCurrentPlayerUI();
+		drawCurrentMoveUI();
 		getChildren().add(checkerboardGridPane);
 		getChildren().add(canvas);
 	}
@@ -148,19 +156,11 @@ public class CheckerboardPane extends Pane {
 		int tileSize = checkerboard.getTileSize();
 		// Traverse entire "units" set
 		units.forEach(u -> {
-			// If we ever want to draw something to symbolize "Selected" visually
-			// if (u.isSelected()) {
-			// System.out.println("Selected: " + u.getX() + ", " + u.getY());
-			// }
-
 			// Rectangle(x coord, y coord, width, height)
 			int x = 10 + (u.getX() * tileSize);
 			int y = 10 + (u.getY() * tileSize);
 			Rectangle r = new Rectangle(x, y, 40, 40);
 
-			// Rounded edges for units
-			//			r.setArcWidth(20);
-			//			r.setArcHeight(20);
 
 			// Determine color of pieces, check which player the unit belongs to
 			if (u.getPlayer() == 0) {
@@ -279,50 +279,66 @@ public class CheckerboardPane extends Pane {
 		Image i = new Image("img/pileofshitpawn.png", 50, 50, true, true);
 		gc.drawImage(i, 10 + (tileSize * 8) + 5, 10 + (tileSize * 3) + 30);
 	}
-	
-	
-	//
-	public void drawCurrentPlayerLabel() {
-		t.setText("Current Player : " + checkerboard.getCurrPlayerToString());
+
+	// Draws the text on the screen that displays the current player
+	public void drawCurrentPlayerUI() {
+		currPlayer.setText("Current Player : " + checkerboard.getCurrPlayerToString());
 	}
 
-	// Draws the card that is hovered over by the mouse
-	public void drawEnlargedCard(Card c) {
-		int ID = c.getMovementTypeID();
-		Affiliation affiliation = c.getAffiliation();
-		ArrayList<String> cardDetails = Effect.getEffect(ID);
-
-		// Rectangle
-		Rectangle r = new Rectangle(10 + (checkerboard.getTileSize() * 8) + (3 * checkerboard.getCardSizeX()), 135,
-				checkerboard.getCardSizeX() * 2, checkerboard.getCardSizeY() * 2 - 10);
-		if (affiliation == Affiliation.WHITE) {
-			r.setFill(Color.WHITE);
-		} else {
-			r.setFill(Color.GREY);
+	// Draws the text on the screen that displays the current card selected
+	public void drawCurrentMoveUI() {
+		Hand currentHand = checkerboard.getCurrPlayer() == 0 ? getPlayer0Hand() : getPlayer1Hand();
+		for (Card c : currentHand.getHand()) {
+			if (c.isSelected()) {
+				currMove.setText("Current Move : " + c.getTitle());
+			}
 		}
-		r.setStroke(Color.BLACK);
+	}
 
-		// Rounded edges for units
-		r.setArcWidth(20);
-		r.setArcHeight(20);
-		tileGroup.getChildren().add(r);
+	// Resets the card selected to null if you unselect a card
+	public void resetCurrentMoveUI() {
+		Hand currentHand = checkerboard.getCurrPlayer() == 0 ? getPlayer0Hand() : getPlayer1Hand();
+		for (Card c : currentHand.getHand()) {
+			if (c.isSelected()) {
+				c.setSelected(false);
+			}
+		}
+		currMove.setText("Current Move : Pawn");
+	}
 
-		// Title text
-		Text title = new Text(10 + (checkerboard.getTileSize() * 8) + (3 * checkerboard.getCardSizeX()) + 20, 175,
-				cardDetails.get(0));
-		title.setUnderline(true);
-		title.setFont(new Font("Happy Monkey", 30));
-		tileGroup.getChildren().add(title);
+	// Returns the checkerboard
+	public Checkerboard getCheckerBoard() {
+		return this.checkerboard;
+	}
 
-		// Image
-		Image image = new Image(cardDetails.get(2), 100, 100, true, true);
-		gc.drawImage(image, 10 + (checkerboard.getTileSize() * 8) + (3 * checkerboard.getCardSizeX()) + 10, 182);
+	// Returns the graphics context
+	public GraphicsContext getGraphicsContext() {
+		return gc;
+	}
 
-		// Description text
-		Text description = new Text((checkerboard.getTileSize() * 8) + (3 * checkerboard.getCardSizeX()) + 20, 300,
-				cardDetails.get(1));
-		description.setWrappingWidth(100);
-		tileGroup.getChildren().add(description);
+	// Returns player 0 (white) hand
+	public Hand getPlayer0Hand() {
+		return this.player0Hand;
+	}
+
+	// Returns player 1 (black) hand
+	public Hand getPlayer1Hand() {
+		return this.player1Hand;
+	}
+
+	// Returns the deck
+	public Deck getDeck() {
+		return this.deck;
+	}
+
+	// Returns the set of units
+	public Set<Unit> getUnits() {
+		return units;
+	}
+
+	// Returns the tileGroup object
+	public Group getTileGroup() {
+		return tileGroup;
 	}
 
 	// Gets the card at the given x, y position
@@ -334,7 +350,6 @@ public class CheckerboardPane extends Pane {
 		int whiteCardRegionTop = 10;
 		int whiteCardRegionBottom = whiteCardRegionTop + checkerboard.getCardSizeY();
 		int blackCardRegionTop = 10 + (tileSize * 6);
-		;
 		int blackCardRegionBottom = blackCardRegionTop + checkerboard.getCardSizeY();
 
 		// If the x area is within the card area
@@ -356,37 +371,4 @@ public class CheckerboardPane extends Pane {
 		// Return null if no card is found
 		return c;
 	}
-
-	public Hand getPlayer0Hand() {
-		return this.player0Hand;
-	}
-
-	public Hand getPlayer1Hand() {
-		return this.player1Hand;
-	}
-
-	public Deck getDeck() {
-		return this.deck;
-	}
-
-	/* Get and set methods */
-	public Checkerboard getCheckerBoard() {
-		return this.checkerboard;
-	}
-
-	// Returns the set of units
-	public Set<Unit> getUnits() {
-		return units;
-	}
-
-	// Returns the graphics context
-	public GraphicsContext getGraphicsContext() {
-		return gc;
-	}
-
-	//
-	public void updateTurnPlayer(Label label) {
-
-	}
-
 }

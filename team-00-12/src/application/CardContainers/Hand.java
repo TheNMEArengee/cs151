@@ -2,8 +2,8 @@ package application.CardContainers;
 
 import java.util.ArrayList;
 
-import application.Affiliation;
-import application.Card;
+import application.Elements.Affiliation;
+import application.Elements.Card;
 
 public class Hand {
 	private ArrayList<Card> hand;
@@ -15,52 +15,48 @@ public class Hand {
 		this.handSize = 5;
 		this.affiliation = affiliation;
 	}
-	
-	
-	//Returns the hand
+
+	// Returns the hand
 	public ArrayList<Card> getHand() {
 		return hand;
 	}
-	
-	public void resetSelectedCards() {
-		this.hand.forEach((c)->{
-			c.setSelected(false);
-		});
-	}
 
-
-	//Add a card to the hand
+	// Add a card to the hand
 	public void addCard(Card c) {
-		if(hand.size() < handSize) {
+		if (hand.size() < handSize) {
 			c.setAffiliation(affiliation);
 			hand.add(c);
 		}
 	}
 
-
-	//Add the set of cards to the hand
+	// Add the set of cards to the hand
 	public void addAll(ArrayList<Card> addMe) {
-		if(hand.size() + addMe.size() <= handSize) {
-			for(Card c : addMe) {
+		if (hand.size() + addMe.size() <= handSize) {
+			for (Card c : addMe) {
 				c.setAffiliation(affiliation);
 			}
 			hand.addAll(addMe);
 		}
 	}
 
-
-	//Removes the card from the hand
+	// Removes the card from the hand
 	public Card removeCard(Card c) {
 		int cardIndex = hand.indexOf(c);
 		Card cardInHand = hand.get(hand.indexOf(c));
 		cardInHand.setAffiliation(Affiliation.DECK);
 		hand.remove(cardIndex);
-		return cardInHand;	
+		return cardInHand;
 	}
 
-
-	//Return hand affiliation
+	// Return hand affiliation
 	public Affiliation getAffiliation() {
 		return affiliation;
-	}	
+	}
+
+	// Sets the selected state of all the cards in the hand to null
+	public void resetSelectedCards() {
+		this.hand.forEach((c) -> {
+			c.setSelected(false);
+		});
+	}
 }
