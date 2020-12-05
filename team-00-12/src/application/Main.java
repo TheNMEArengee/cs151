@@ -23,7 +23,7 @@ public class Main extends Application {
 	// Used for MasterCard #ad circle movements
 	private double initX;
 	private double initY;
-	private Checkerboard checkerboard;
+	
 
 	// Method to open application
 	@Override
