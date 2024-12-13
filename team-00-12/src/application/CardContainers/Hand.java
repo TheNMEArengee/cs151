@@ -2,8 +2,8 @@ package application.CardContainers;
 
 import java.util.ArrayList;
 
-import application.Affiliation;
-import application.Card;
+import application.Elements.Affiliation;
+import application.Elements.Card;
 
 public class Hand {
 	private ArrayList<Card> hand;
@@ -19,12 +19,6 @@ public class Hand {
 	// Returns the hand
 	public ArrayList<Card> getHand() {
 		return hand;
-	}
-
-	public void resetSelectedCards() {
-		this.hand.forEach((c) -> {
-			c.setSelected(false);
-		});
 	}
 
 	// Add a card to the hand
@@ -57,5 +51,12 @@ public class Hand {
 	// Return hand affiliation
 	public Affiliation getAffiliation() {
 		return affiliation;
+	}
+
+	// Sets the selected state of all the cards in the hand to null
+	public void resetSelectedCards() {
+		this.hand.forEach((c) -> {
+			c.setSelected(false);
+		});
 	}
 }

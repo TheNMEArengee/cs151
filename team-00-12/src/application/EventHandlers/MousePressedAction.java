@@ -1,8 +1,7 @@
 package application.EventHandlers;
 
-import application.Affiliation;
-import application.Card;
-import application.Unit;
+import application.Elements.Card;
+import application.Elements.Unit;
 import application.GameBoard.Checkerboard;
 import application.GameBoard.CheckerboardPane;
 import javafx.event.EventHandler;
@@ -36,11 +35,13 @@ public class MousePressedAction implements EventHandler<MouseEvent> {
 		int mouseY = (int) e.getY();
 
 		currentPlayer = checkerboard.getCurrPlayer();
+		currentSelectedMovement = null;
 		Card c = checkerboardPane.getCardAt(mouseX, mouseY);
 		Unit u = getUnitSelected(boardX, boardY);
-
+		
 		if (u != null) { // Unit is selected
 			// Traverse 'units' set in checkerboardPane to redraw/update units
+			setSelectedMovement();
 			checkerboardPane.getUnits().forEach(unit -> {
 				// If unit's coordinates match calculated mouse press coordinates
 				if (unit.getX() == boardX && unit.getY() == boardY) {
@@ -73,7 +74,7 @@ public class MousePressedAction implements EventHandler<MouseEvent> {
 		}
 
 	}
-	
+
 	private Unit getUnitSelected(int boardX, int boardY) {
 		checkerboardPane.getUnits();
 		for (Unit u : checkerboardPane.getUnits()) {
